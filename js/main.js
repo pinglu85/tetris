@@ -291,18 +291,19 @@ function calculateScore() {
       cell.classList.contains('previousPiece')
     );
     if (completedLine) {
-      line.forEach((cell, index) => {
+      line.forEach((cell) => {
         cell.style.backgroundImage = '';
         cell.classList.remove('previousPiece');
       });
-      cells.slice(0, i).forEach((cell, index) => {
-        if (cell.classList.contains('previousPiece')) {
+      for (let index = i - 1; index >= 0; index--) {
+        if (cells[index].classList.contains('previousPiece')) {
           cells[index + 10].classList.add('previousPiece');
-          cells[index + 10].style.backgroundImage = cell.style.backgroundImage;
-          cell.classList.remove('previousPiece');
-          cell.style.backgroundImage = '';
+          cells[index + 10].style.backgroundImage =
+            cells[index].style.backgroundImage;
+          cells[index].classList.remove('previousPiece');
+          cells[index].style.backgroundImage = '';
         }
-      });
+      }
       score.innerText = String(Number(score.innerText) + 1);
     }
   }
