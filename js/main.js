@@ -212,9 +212,11 @@ function rotation() {
   const leftmost = currentTetromino.some(
     (index) => (index + currentPosition) % 10 === 0
   );
-  const rightmost = currentTetromino.some(
-    (index) => (index + currentPosition + 1) % 10 === 0
-  );
+  const rightmost =
+    currentTetromino.some(
+      (index) => (index + currentPosition + 1) % 10 === 0
+    ) ||
+    currentTetromino.some((index) => (index + currentPosition + 2) % 10 === 0);
   const rotation =
     currentTetrominoRotation + 1 === 4 ? 0 : currentTetrominoRotation + 1;
   const rotatedTetromino = tetrominoes[currentTetrominoIndex][rotation];
