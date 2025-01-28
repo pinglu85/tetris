@@ -1,11 +1,11 @@
 export const colors = [
-  "url(/blue_block.png)",
-  "url(/green_block.png)",
-  "url(/navy_block.png)",
-  "url(/peach_block.png)",
-  "url(/pink_block.png)",
-  "url(/purple_block.png)",
-  "url(/yellow_block.png)",
+  "blue-block",
+  "green-block",
+  "navy-block",
+  "peach-block",
+  "pink-block",
+  "purple-block",
+  "yellow-block",
 ];
 
 export const svgColors = [

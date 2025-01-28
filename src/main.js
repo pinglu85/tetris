@@ -68,15 +68,15 @@ let currentPosition = 3;
 function drawCurrent(tetromino, colorIndex) {
   tetromino.forEach((index) => {
     // cells[index + currentPosition].classList.add('block');
-    cells[index + currentPosition].style.backgroundImage = colors[colorIndex];
+    cells[index + currentPosition].classList.add(colors[colorIndex]);
   });
 }
 
 // Undraw Tetromino
-function undrawCurrent(tetromino) {
+function undrawCurrent(tetromino, colorIndex) {
   tetromino.forEach((index) => {
     // cells[index + currentPosition].classList.remove('block');
-    cells[index + currentPosition].style.backgroundImage = "";
+    cells[index + currentPosition].classList.remove(colors[colorIndex]);
   });
 }
 
@@ -166,7 +166,7 @@ function descend() {
       drawCurrent(currentTetromino, currentColorIndex);
       descend();
     } else {
-      undrawCurrent(currentTetromino);
+      undrawCurrent(currentTetromino, currentColorIndex);
       currentPosition += 10;
       drawCurrent(currentTetromino, currentColorIndex);
     }
@@ -203,7 +203,7 @@ function moveRight() {
       cells[index + currentPosition + 1].classList.contains("previousPiece"),
   );
   if (!rightmost) {
-    undrawCurrent(currentTetromino);
+    undrawCurrent(currentTetromino, currentColorIndex);
     currentPosition++;
     drawCurrent(currentTetromino, currentColorIndex);
   }
@@ -216,7 +216,7 @@ function moveLeft() {
       cells[index + currentPosition - 1].classList.contains("previousPiece"),
   );
   if (!leftmost) {
-    undrawCurrent(currentTetromino);
+    undrawCurrent(currentTetromino, currentColorIndex);
     currentPosition--;
     drawCurrent(currentTetromino, currentColorIndex);
   }
@@ -231,7 +231,7 @@ function moveDown() {
       ),
   );
   if (!bottom) {
-    undrawCurrent(currentTetromino);
+    undrawCurrent(currentTetromino, currentColorIndex);
     currentPosition += 10;
     drawCurrent(currentTetromino, currentColorIndex);
   }
@@ -307,7 +307,7 @@ function rotation() {
     }
   }
   if (!isCollidedLeft && !isCollidedRight && !isCollidedBottom) {
-    undrawCurrent(currentTetromino);
+    undrawCurrent(currentTetromino, currentColorIndex);
     currentPosition = tempPosition;
     currentTetrominoRotation = rotation;
     currentTetromino = rotatedTetromino;
@@ -323,16 +323,14 @@ function calculateScore() {
     );
     if (completedLine) {
       line.forEach((cell) => {
-        cell.style.backgroundImage = "";
+        cell.classList.remove(cell.classList.item(1));
         cell.classList.remove("previousPiece");
       });
       for (let index = i - 1; index >= 0; index--) {
         if (cells[index].classList.contains("previousPiece")) {
-          cells[index + 10].classList.add("previousPiece");
-          cells[index + 10].style.backgroundImage =
-            cells[index].style.backgroundImage;
-          cells[index].classList.remove("previousPiece");
-          cells[index].style.backgroundImage = "";
+          const colorClass = cells[index].classList.item(1);
+          cells[index + 10].classList.add("previousPiece", colorClass);
+          cells[index].classList.remove("previousPiece", colorClass);
         }
       }
       score.innerText = String(Number(score.innerText) + 1);
