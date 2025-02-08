@@ -9,7 +9,7 @@ interface Cell {
 export class Board {
   #grid: Cell[][];
 
-  constructor(numOfRows = 20, numOfCols = 10) {
+  constructor(numOfRows: number, numOfCols: number) {
     this.#grid = Array.from({ length: numOfRows }, () =>
       Array.from({ length: numOfCols }, () => ({ filled: false, color: '' }))
     );
