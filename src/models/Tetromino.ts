@@ -112,6 +112,14 @@ export class Tetromino {
   get isLocked() {
     return this.#isLocked;
   }
+
+  get blocks() {
+    return this.#blocks;
+  }
+
+  get pivotPosition() {
+    return this.#pivotPosition;
+  }
 }
 
 export interface TetrominoPreview {
