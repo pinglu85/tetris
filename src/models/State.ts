@@ -6,6 +6,7 @@ import type { TetrominoTypes, Colors, TetrominoPreview } from './Tetromino';
 export class State {
   #score: number;
   #level: number;
+  #clearedLines: number;
   #isGameOver: boolean;
   #currTetromino: Tetromino;
   #nextTetromino: TetrominoPreview;
@@ -20,6 +21,7 @@ export class State {
   ) {
     this.#score = 0;
     this.#level = 0;
+    this.#clearedLines = 0;
     this.#isGameOver = false;
     this.#currTetromino = currTetromino;
     this.#nextTetromino = nextTetromino;
