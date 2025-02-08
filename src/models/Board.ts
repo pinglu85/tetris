@@ -7,9 +7,11 @@ interface Cell {
 }
 
 export class Board {
+  #numOfCols: number;
   #grid: Cell[][];
 
   constructor(numOfRows: number, numOfCols: number) {
+    this.#numOfCols = numOfCols;
     this.#grid = Array.from({ length: numOfRows }, () =>
       Array.from({ length: numOfCols }, () => ({ filled: false, color: '' }))
     );
@@ -23,5 +25,9 @@ export class Board {
 
   get grid() {
     return this.#grid;
+  }
+
+  get numOfCols() {
+    return this.#numOfCols;
   }
 }
