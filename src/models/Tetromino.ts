@@ -120,6 +120,10 @@ export class Tetromino {
   get pivotPosition() {
     return this.#pivotPosition;
   }
+
+  get color() {
+    return this.#color;
+  }
 }
 
 export interface TetrominoPreview {
