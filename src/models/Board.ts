@@ -23,7 +23,19 @@ export class Board {
    * Integrate the locked tetromino into its grid and clear lines.
    * @param {State} state
    */
-  update(state: State) {}
+  update(state: State): number {
+    const { currTetromino } = state;
+    const [pivotX, pivotY] = currTetromino.pivotPosition;
+
+    for (const [x, y] of currTetromino.blocks) {
+      const row = x + pivotX;
+      const col = y + pivotY;
+      this.#grid[row][col].filled = true;
+      this.#grid[row][col].color = currTetromino.color;
+    }
+
+    return this.#clearLines();
+  }
 
   checkCollision(tetromino: Tetromino): boolean {
     const { blocks, pivotPosition } = tetromino;
