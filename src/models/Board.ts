@@ -13,14 +13,14 @@ export interface WithTetromino {
 }
 
 export class Board {
-  #numOfRows: number;
-  #numOfCols: number;
-  #grid: Cell[][];
+  private _numOfRows: number;
+  private _numOfCols: number;
+  private _grid: Cell[][];
 
   constructor(numOfRows: number, numOfCols: number) {
-    this.#numOfRows = numOfRows;
-    this.#numOfCols = numOfCols;
-    this.#grid = Array.from({ length: numOfRows }, () =>
+    this._numOfRows = numOfRows;
+    this._numOfCols = numOfCols;
+    this._grid = Array.from({ length: numOfRows }, () =>
       Array.from({ length: numOfCols }, () => ({ filled: false, color: '' }))
     );
   }
@@ -36,11 +36,11 @@ export class Board {
     for (const [x, y] of currTetromino.blocks) {
       const row = x + pivotX;
       const col = y + pivotY;
-      this.#grid[row][col].filled = true;
-      this.#grid[row][col].color = currTetromino.color;
+      this._grid[row][col].filled = true;
+      this._grid[row][col].color = currTetromino.color;
     }
 
-    return this.#clearLines();
+    return this.clearLines();
   }
 
   checkCollision(tetromino: Tetromino): boolean {
@@ -51,8 +51,8 @@ export class Board {
       const blockCol = pivotPosition[1] + block[1];
 
       if (
-        blockRow + 1 === this.#numOfRows ||
-        this.#grid[blockRow + 1][blockCol].filled
+        blockRow + 1 === this._numOfRows ||
+        this._grid[blockRow + 1][blockCol].filled
       ) {
         return true;
       }
@@ -61,12 +61,12 @@ export class Board {
     return false;
   }
 
-  #clearLines(): number {
+  private clearLines(): number {
     const availableRowQueue: number[] = [];
     let clearedLines = 0;
 
-    for (let row = this.#numOfRows - 1; row >= 0; row--) {
-      if (this.#grid[row].every((col) => col.filled)) {
+    for (let row = this._numOfRows - 1; row >= 0; row--) {
+      if (this._grid[row].every((col) => col.filled)) {
         clearedLines += 1;
         availableRowQueue.push(row);
         continue;
@@ -75,8 +75,8 @@ export class Board {
       const availableRow = availableRowQueue.shift();
       if (availableRow === undefined) continue;
 
-      for (let col = 0; col < this.#numOfCols; col++) {
-        this.#grid[availableRow][col] = this.#grid[row][col];
+      for (let col = 0; col < this._numOfCols; col++) {
+        this._grid[availableRow][col] = this._grid[row][col];
       }
 
       availableRowQueue.push(row);
@@ -86,10 +86,10 @@ export class Board {
   }
 
   get grid() {
-    return this.#grid;
+    return this._grid;
   }
 
   get numOfCols() {
-    return this.#numOfCols;
+    return this._numOfCols;
   }
 }

@@ -65,15 +65,15 @@ const NUM_OF_COLORS = COLORS.length;
 export type Colors = (typeof COLORS)[number];
 
 export class Tetromino {
-  #type: TetrominoTypes;
-  #color: Colors;
-  #blocks: number[][]; // 4 x 2 matrix
-  #pivotPosition: number[]; // [row, col]
-  #DAS: number; // Delayed Auto Shift
-  #isDownPressed: boolean;
-  #fallInterval: number;
-  #hardDropInterval: number;
-  #isLocked: boolean;
+  private type: TetrominoTypes;
+  private _color: Colors;
+  private _blocks: number[][]; // 4 x 2 matrix
+  private _pivotPosition: number[]; // [row, col]
+  private DAS: number; // Delayed Auto Shift
+  private isDownPressed: boolean;
+  private fallInterval: number;
+  private hardDropInterval: number;
+  private _isLocked: boolean;
 
   /**
    * Create a Tetromino.
@@ -88,41 +88,41 @@ export class Tetromino {
     pivotPosition: number[],
     level: number
   ) {
-    this.#type = type;
-    this.#color = color;
-    this.#blocks = TETROMINO_BLOCKS[type];
-    this.#pivotPosition = pivotPosition;
-    this.#DAS = 200; // 200ms
-    this.#isDownPressed = false;
-    this.#fallInterval = 1000 - 50 * level;
-    this.#hardDropInterval = 50;
-    this.#isLocked = false;
+    this.type = type;
+    this._color = color;
+    this._blocks = TETROMINO_BLOCKS[type];
+    this._pivotPosition = pivotPosition;
+    this.DAS = 200; // 200ms
+    this.isDownPressed = false;
+    this.fallInterval = 1000 - 50 * level;
+    this.hardDropInterval = 50;
+    this._isLocked = false;
   }
 
   update(elapsedTime: number, state: State, keys: Record<string, boolean>) {}
 
-  #moveDown() {}
+  private moveDown() {}
 
-  #hardDrop() {}
+  private hardDrop() {}
 
-  #horizontalMove(direction: 'left' | ' right') {}
+  private horizontalMove(direction: 'left' | ' right') {}
 
-  #rotate(direction = 'clockwise') {}
+  private rotate(direction = 'clockwise') {}
 
   get isLocked() {
-    return this.#isLocked;
+    return this._isLocked;
   }
 
   get blocks() {
-    return this.#blocks;
+    return this._blocks;
   }
 
   get pivotPosition() {
-    return this.#pivotPosition;
+    return this._pivotPosition;
   }
 
   get color() {
-    return this.#color;
+    return this._color;
   }
 }
 
