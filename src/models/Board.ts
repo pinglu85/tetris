@@ -1,9 +1,15 @@
-import type { State } from './State';
 import type { Tetromino } from './Tetromino';
 
-interface Cell {
+export interface Cell {
   filled: boolean;
   color: string;
+}
+
+export interface WithTetromino {
+  currTetromino: Pick<
+    Tetromino,
+    'blocks' | 'pivotPosition' | 'isLocked' | 'color'
+  >;
 }
 
 export class Board {
@@ -21,9 +27,9 @@ export class Board {
 
   /**
    * Integrate the locked tetromino into its grid and clear lines.
-   * @param {State} state
+   * @param {WithTetromino} state
    */
-  update(state: State): number {
+  update(state: WithTetromino): number {
     const { currTetromino } = state;
     const [pivotX, pivotY] = currTetromino.pivotPosition;
 
