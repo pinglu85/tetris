@@ -13,16 +13,24 @@ export interface WithTetromino {
 }
 
 export class Board {
-  private _numOfRows: number;
-  private _numOfCols: number;
-  private _grid: Cell[][];
+  private readonly numOfRows: number;
+  private readonly _numOfCols: number;
 
-  constructor(numOfRows: number, numOfCols: number) {
-    this._numOfRows = numOfRows;
-    this._numOfCols = numOfCols;
-    this._grid = Array.from({ length: numOfRows }, () =>
+  private constructor(private _grid: Cell[][]) {
+    this.numOfRows = _grid.length;
+    this._numOfCols = _grid[0].length;
+  }
+
+  static createEmpty(numOfRows: number, numOfCols: number): Board {
+    const grid = Array.from({ length: numOfRows }, () =>
       Array.from({ length: numOfCols }, () => ({ filled: false, color: '' }))
     );
+
+    return new Board(grid);
+  }
+
+  static fromGrid(grid: Cell[][]): Board {
+    return new Board(grid);
   }
 
   /**
@@ -51,7 +59,7 @@ export class Board {
       const blockCol = pivotPosition[1] + block[1];
 
       if (
-        blockRow + 1 === this._numOfRows ||
+        blockRow + 1 === this.numOfRows ||
         this._grid[blockRow + 1][blockCol].filled
       ) {
         return true;
@@ -65,7 +73,7 @@ export class Board {
     const availableRowQueue: number[] = [];
     let clearedLines = 0;
 
-    for (let row = this._numOfRows - 1; row >= 0; row--) {
+    for (let row = this.numOfRows - 1; row >= 0; row--) {
       if (this._grid[row].every((col) => col.filled)) {
         clearedLines += 1;
         availableRowQueue.push(row);
