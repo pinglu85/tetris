@@ -65,15 +65,14 @@ const NUM_OF_COLORS = COLORS.length;
 export type Colors = (typeof COLORS)[number];
 
 export class Tetromino {
-  private type: TetrominoTypes;
   private _color: Colors;
   private _blocks: number[][]; // 4 x 2 matrix
   private _pivotPosition: number[]; // [row, col]
-  private DAS: number; // Delayed Auto Shift
   private isDownPressed: boolean;
-  private fallInterval: number;
-  private hardDropInterval: number;
   private _isLocked: boolean;
+  private readonly DAS: number; // Delayed Auto Shift
+  private readonly fallInterval: number;
+  private readonly hardDropInterval: number;
 
   /**
    * Create a Tetromino.
@@ -83,20 +82,19 @@ export class Tetromino {
    * @param {number} level -  non-negative integer
    */
   constructor(
-    type: TetrominoTypes,
+    private readonly type: TetrominoTypes,
     color: Colors,
     pivotPosition: number[],
     level: number
   ) {
-    this.type = type;
     this._color = color;
     this._blocks = TETROMINO_BLOCKS[type];
     this._pivotPosition = pivotPosition;
-    this.DAS = 200; // 200ms
     this.isDownPressed = false;
+    this._isLocked = false;
+    this.DAS = 200; // 200ms
     this.fallInterval = 1000 - 50 * level;
     this.hardDropInterval = 50;
-    this._isLocked = false;
   }
 
   update(elapsedTime: number, state: State, keys: Record<string, boolean>) {}
