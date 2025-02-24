@@ -11,13 +11,12 @@ export class State {
   private _currTetromino: Tetromino;
   private _nextTetromino: TetrominoPreview;
   private _board: Board;
-  private onTetrominoLock: () => void;
 
   constructor(
     board: Board,
     currTetromino: Tetromino,
     nextTetromino: TetrominoPreview,
-    onTetrominoLock: () => void
+    private readonly onTetrominoLock: () => void
   ) {
     this._score = 0;
     this._level = 0;
@@ -26,7 +25,6 @@ export class State {
     this._currTetromino = currTetromino;
     this._nextTetromino = nextTetromino;
     this._board = board;
-    this.onTetrominoLock = onTetrominoLock;
   }
 
   update(elapsedTime: number, keys: Record<string, boolean>) {}
