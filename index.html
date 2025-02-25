@@ -2,30 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tetris</title>
-    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <header class="header">
-      <h1>Tetris</h1>
-      <button class="btn" id="start-button">Start / Pause</button>
-    </header>
-    <main class="game-wrapper">
-      <div class="game-info">
-        <div class="score-wrapper">
-          <p class="score-label">Score</p>
-          <p id="score">0</p>
-        </div>
-        <div>
-          Next
-          <div id="next-tetromino-wrapper">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"></svg>
-          </div>
-        </div>
-      </div>
-      <div id="game-grid"></div>
-    </main>
-    <script type="module" src="js/main.js"></script>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -134,3 +134,71 @@ body {
   background-color: var(--dark-bg-b);
   border-radius: var(--border-radius);
 }
+
+.blue-block,
+.green-block,
+.navy-block,
+.peach-block,
+.pink-block,
+.purple-block,
+.yellow-block {
+  border-width: 4px;
+  border-style: solid;
+  border-radius: 2px;
+}
+
+.blue-block {
+  background: #6ac4e4;
+  border-left-color: #a6f5ff;
+  border-top-color: #94f0ff;
+  border-right-color: #5cb7d9;
+  border-bottom-color: #57a7c2;
+}
+
+.green-block {
+  background: #5dcfa5;
+  border-left-color: #99ffdb;
+  border-top-color: #89facd;
+  border-right-color: #4ec299;
+  border-bottom-color: #4cb08b;
+}
+
+.navy-block {
+  background: #116b8b;
+  border-left-color: #4d9ca6;
+  border-top-color: #3a97a6;
+  border-right-color: #035e80;
+  border-bottom-color: #004e69;
+}
+
+.peach-block {
+  background: #ffa28d;
+  border-left-color: #ffd2c3;
+  border-top-color: #ffccb4;
+  border-right-color: #ef9581;
+  border-bottom-color: #ee8373;
+}
+
+.pink-block {
+  background: #d48dc3;
+  border-left-color: #ffbede;
+  border-top-color: #feb9de;
+  border-right-color: #c680b8;
+  border-bottom-color: #b671a8;
+}
+
+.purple-block {
+  background: #755ac3;
+  border-left-color: #b18bde;
+  border-top-color: #9f86de;
+  border-right-color: #674db8;
+  border-bottom-color: #573ea8;
+}
+
+.yellow-block {
+  background: #bfc192;
+  border-left-color: #fbf1c8;
+  border-top-color: #eaecba;
+  border-right-color: #afb486;
+  border-bottom-color: #aea278;
+}
