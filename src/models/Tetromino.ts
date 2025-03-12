@@ -99,6 +99,13 @@ export class Tetromino {
 
   update(elapsedTime: number, state: State, keys: Record<string, boolean>) {}
 
+  getBlockPositions(): number[][] {
+    return this._blocks.map(([offsetX, offsetY]) => [
+      offsetX + this._pivotPosition[0],
+      offsetY + this._pivotPosition[1],
+    ]);
+  }
+
   private moveDown() {}
 
   private hardDrop() {}
@@ -109,14 +116,6 @@ export class Tetromino {
 
   get isLocked() {
     return this._isLocked;
-  }
-
-  get blocks() {
-    return this._blocks;
-  }
-
-  get pivotPosition() {
-    return this._pivotPosition;
   }
 
   get color() {

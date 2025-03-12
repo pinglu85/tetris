@@ -6,10 +6,7 @@ export interface Cell {
 }
 
 export interface WithTetromino {
-  currTetromino: Pick<
-    Tetromino,
-    'blocks' | 'pivotPosition' | 'isLocked' | 'color'
-  >;
+  currTetromino: Pick<Tetromino, 'getBlockPositions' | 'isLocked' | 'color'>;
 }
 
 export class Board {
@@ -39,11 +36,9 @@ export class Board {
    */
   update(state: WithTetromino): number {
     const { currTetromino } = state;
-    const [pivotX, pivotY] = currTetromino.pivotPosition;
+    const blocks = currTetromino.getBlockPositions();
 
-    for (const [x, y] of currTetromino.blocks) {
-      const row = x + pivotX;
-      const col = y + pivotY;
+    for (const [row, col] of blocks) {
       this._grid[row][col].filled = true;
       this._grid[row][col].color = currTetromino.color;
     }
@@ -52,16 +47,10 @@ export class Board {
   }
 
   canMoveDown(tetromino: Tetromino): boolean {
-    const { blocks, pivotPosition } = tetromino;
+    const blocks = tetromino.getBlockPositions();
 
-    for (const block of blocks) {
-      const blockRow = pivotPosition[0] + block[0];
-      const blockCol = pivotPosition[1] + block[1];
-
-      if (
-        blockRow + 1 === this.numOfRows ||
-        this._grid[blockRow + 1][blockCol].filled
-      ) {
+    for (const [row, col] of blocks) {
+      if (row + 1 === this.numOfRows || this._grid[row + 1][col].filled) {
         return false;
       }
     }
