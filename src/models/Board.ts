@@ -51,7 +51,7 @@ export class Board {
     return this.clearLines();
   }
 
-  checkCollision(tetromino: Tetromino): boolean {
+  checkCollisionBelow(tetromino: Tetromino): boolean {
     const { blocks, pivotPosition } = tetromino;
 
     for (const block of blocks) {
