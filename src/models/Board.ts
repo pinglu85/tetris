@@ -63,6 +63,23 @@ export class Board {
     return true;
   }
 
+  isValidPosition(tetromino: TetrominoState): boolean {
+    const blocks = tetromino.getBlockPositions();
+
+    for (const [row, col] of blocks) {
+      if (
+        row >= this.numOfRows ||
+        col < 0 ||
+        col >= this.numOfCols ||
+        this._grid[row][col].filled
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   private clearLines(): number {
     const availableRowQueue: number[] = [];
     let clearedLines = 0;
