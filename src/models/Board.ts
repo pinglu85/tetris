@@ -51,7 +51,7 @@ export class Board {
     return this.clearLines();
   }
 
-  checkCollisionBelow(tetromino: Tetromino): boolean {
+  canMoveDown(tetromino: Tetromino): boolean {
     const { blocks, pivotPosition } = tetromino;
 
     for (const block of blocks) {
@@ -62,11 +62,11 @@ export class Board {
         blockRow + 1 === this.numOfRows ||
         this._grid[blockRow + 1][blockCol].filled
       ) {
-        return true;
+        return false;
       }
     }
 
-    return false;
+    return true;
   }
 
   private clearLines(): number {
