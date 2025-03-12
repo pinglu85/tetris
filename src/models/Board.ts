@@ -16,11 +16,11 @@ export interface WithTetromino {
 
 export class Board {
   private readonly numOfRows: number;
-  private readonly _numOfCols: number;
+  private readonly numOfCols: number;
 
   private constructor(private _grid: Cell[][]) {
     this.numOfRows = _grid.length;
-    this._numOfCols = _grid[0].length;
+    this.numOfCols = _grid[0].length;
   }
 
   static createEmpty(numOfRows: number, numOfCols: number): Board {
@@ -77,7 +77,7 @@ export class Board {
       const availableRow = availableRowQueue.shift();
       if (availableRow === undefined) continue;
 
-      for (let col = 0; col < this._numOfCols; col++) {
+      for (let col = 0; col < this.numOfCols; col++) {
         this._grid[availableRow][col] = this._grid[row][col];
       }
 
@@ -89,9 +89,5 @@ export class Board {
 
   get grid() {
     return this._grid;
-  }
-
-  get numOfCols() {
-    return this._numOfCols;
   }
 }
