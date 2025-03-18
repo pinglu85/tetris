@@ -117,7 +117,10 @@ export class Board {
       if (availableRowIndex === undefined) continue;
 
       for (let j = 0; j < this.numOfCols; j++) {
-        this._grid[availableRowIndex][j] = this._grid[i][j];
+        this._grid[availableRowIndex][j].filled = this._grid[i][j].filled;
+        this._grid[availableRowIndex][j].color = this._grid[i][j].color;
+        this._grid[i][j].filled = false;
+        this._grid[i][j].color = '';
       }
 
       availableRowIndexQueue.push(i);
