@@ -65,9 +65,9 @@ export class Board {
     const { currTetromino } = state;
     const blocks = currTetromino.getBlockPositions();
 
-    for (const [row, col] of blocks) {
-      this._grid[row][col].filled = true;
-      this._grid[row][col].color = currTetromino.color;
+    for (const [i, j] of blocks) {
+      this._grid[i][j].filled = true;
+      this._grid[i][j].color = currTetromino.color;
     }
 
     return this.clearLines();
@@ -76,8 +76,8 @@ export class Board {
   canMoveDown(tetromino: TetrominoState): boolean {
     const blocks = tetromino.getBlockPositions();
 
-    for (const [row, col] of blocks) {
-      if (row + 1 === this.numOfRows || this._grid[row + 1][col].filled) {
+    for (const [i, j] of blocks) {
+      if (i + 1 === this.numOfRows || this._grid[i + 1][j].filled) {
         return false;
       }
     }
@@ -88,12 +88,12 @@ export class Board {
   isValidPosition(tetromino: TetrominoState): boolean {
     const blocks = tetromino.getBlockPositions();
 
-    for (const [row, col] of blocks) {
+    for (const [i, j] of blocks) {
       if (
-        row >= this.numOfRows ||
-        col < 0 ||
-        col >= this.numOfCols ||
-        this._grid[row][col].filled
+        i >= this.numOfRows ||
+        j < 0 ||
+        j >= this.numOfCols ||
+        this._grid[i][j].filled
       ) {
         return false;
       }
@@ -103,24 +103,24 @@ export class Board {
   }
 
   private clearLines(): number {
-    const availableRowQueue: number[] = [];
+    const availableRowIndexQueue: number[] = [];
     let clearedLines = 0;
 
-    for (let row = this.numOfRows - 1; row >= 0; row--) {
-      if (this._grid[row].every((col) => col.filled)) {
+    for (let i = this.numOfRows - 1; i >= 0; i--) {
+      if (this._grid[i].every((col) => col.filled)) {
         clearedLines += 1;
-        availableRowQueue.push(row);
+        availableRowIndexQueue.push(i);
         continue;
       }
 
-      const availableRow = availableRowQueue.shift();
-      if (availableRow === undefined) continue;
+      const availableRowIndex = availableRowIndexQueue.shift();
+      if (availableRowIndex === undefined) continue;
 
-      for (let col = 0; col < this.numOfCols; col++) {
-        this._grid[availableRow][col] = this._grid[row][col];
+      for (let j = 0; j < this.numOfCols; j++) {
+        this._grid[availableRowIndex][j] = this._grid[i][j];
       }
 
-      availableRowQueue.push(row);
+      availableRowIndexQueue.push(i);
     }
 
     return clearedLines;
