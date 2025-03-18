@@ -19,6 +19,8 @@ describe('Board', () => {
             color: '',
           }))
       );
+
+      expect(board).toBeInstanceOf(Board);
       expect(board.grid).toStrictEqual(expectedGrid);
     });
   });
