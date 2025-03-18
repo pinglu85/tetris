@@ -1,3 +1,5 @@
+import { NUM_OF_BUFFER_ROWS } from '../constants';
+
 import type { Tetromino } from './Tetromino';
 
 export interface Cell {
@@ -24,14 +26,34 @@ export class Board {
   }
 
   static createEmpty(numOfRows: number, numOfCols: number): Board {
-    const grid = Array.from({ length: numOfRows }, () =>
+    const grid = Array.from({ length: numOfRows + NUM_OF_BUFFER_ROWS }, () =>
       Array.from({ length: numOfCols }, () => ({ filled: false, color: '' }))
     );
-
     return new Board(grid);
   }
 
-  static fromGrid(grid: Cell[][]): Board {
+  static fromGrid(originalGrid: Cell[][]): Board {
+    const numOfRows = originalGrid.length + NUM_OF_BUFFER_ROWS;
+    const numOfCols = originalGrid[0].length;
+    const grid: Cell[][] = [];
+
+    for (let i = 0; i < numOfRows; i++) {
+      const row: Cell[] = new Array(numOfCols);
+
+      for (let j = 0; j < numOfCols; j++) {
+        if (i < NUM_OF_BUFFER_ROWS) {
+          row[j] = { filled: false, color: '' };
+        } else {
+          row[j] = {
+            filled: originalGrid[i - NUM_OF_BUFFER_ROWS][j].filled,
+            color: originalGrid[i - NUM_OF_BUFFER_ROWS][j].color,
+          };
+        }
+      }
+
+      grid.push(row);
+    }
+
     return new Board(grid);
   }
 
