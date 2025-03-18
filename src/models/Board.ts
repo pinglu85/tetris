@@ -110,18 +110,29 @@ export class Board {
       if (this._grid[i].every((col) => col.filled)) {
         clearedLines += 1;
         availableRowIndexQueue.push(i);
+
+        for (let j = 0; j < this.numOfCols; j++) {
+          this._grid[i][j].filled = false;
+          this._grid[i][j].color = '';
+        }
         continue;
       }
 
       const availableRowIndex = availableRowIndexQueue.shift();
       if (availableRowIndex === undefined) continue;
 
+      let numOfUnfilledCells = 0;
+
       for (let j = 0; j < this.numOfCols; j++) {
+        if (!this._grid[i][j].filled) numOfUnfilledCells++;
+
         this._grid[availableRowIndex][j].filled = this._grid[i][j].filled;
         this._grid[availableRowIndex][j].color = this._grid[i][j].color;
         this._grid[i][j].filled = false;
         this._grid[i][j].color = '';
       }
+
+      if (numOfUnfilledCells === this.numOfCols) break;
 
       availableRowIndexQueue.push(i);
     }
