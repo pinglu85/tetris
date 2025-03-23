@@ -33,26 +33,18 @@ export class Board {
   }
 
   static fromGrid(originalGrid: Cell[][]): Board {
-    const numOfRows = originalGrid.length + NUM_OF_BUFFER_ROWS;
-    const numOfCols = originalGrid[0].length;
-    const grid: Cell[][] = [];
-
-    for (let i = 0; i < numOfRows; i++) {
-      const row: Cell[] = new Array(numOfCols);
-
-      for (let j = 0; j < numOfCols; j++) {
-        if (i < NUM_OF_BUFFER_ROWS) {
-          row[j] = { filled: false, color: '' };
-        } else {
-          row[j] = {
-            filled: originalGrid[i - NUM_OF_BUFFER_ROWS][j].filled,
-            color: originalGrid[i - NUM_OF_BUFFER_ROWS][j].color,
-          };
-        }
-      }
-
-      grid.push(row);
+    const numOfRows = originalGrid.length;
+    if (numOfRows <= NUM_OF_BUFFER_ROWS) {
+      throw new Error('The grid must include buffer rows.');
     }
+
+    const numOfCols = originalGrid[0].length;
+    const grid: Cell[][] = Array.from({ length: numOfRows }, (_, i) =>
+      Array.from({ length: numOfCols }, (_, j) => ({
+        filled: originalGrid[i][j].filled,
+        color: originalGrid[i][j].color,
+      }))
+    );
 
     return new Board(grid);
   }
