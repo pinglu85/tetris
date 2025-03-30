@@ -1,5 +1,3 @@
-import { NUM_OF_BUFFER_ROWS } from '../constants';
-
 import type { Tetromino } from './Tetromino';
 
 export interface Cell {
@@ -20,41 +18,46 @@ export class Board {
   private readonly numOfRows: number;
   private readonly numOfCols: number;
 
-  private constructor(private _grid: Cell[][]) {
+  private constructor(
+    private _grid: Cell[][],
+    private readonly numOfBufferRows: number
+  ) {
     this.numOfRows = _grid.length;
     this.numOfCols = _grid[0].length;
   }
 
-  static createEmpty(numOfRows: number, numOfCols: number): Board {
-    const grid = Array.from({ length: numOfRows + NUM_OF_BUFFER_ROWS }, () =>
-      Array.from({ length: numOfCols }, () => ({ filled: false, color: '' }))
-    );
-    return new Board(grid);
-  }
-
-  static fromGrid(originalGrid: Cell[][]): Board {
-    const numOfRows = originalGrid.length + NUM_OF_BUFFER_ROWS;
-    const numOfCols = originalGrid[0].length;
-    const grid: Cell[][] = [];
-
-    for (let i = 0; i < numOfRows; i++) {
-      const row: Cell[] = new Array(numOfCols);
-
-      for (let j = 0; j < numOfCols; j++) {
-        if (i < NUM_OF_BUFFER_ROWS) {
-          row[j] = { filled: false, color: '' };
-        } else {
-          row[j] = {
-            filled: originalGrid[i - NUM_OF_BUFFER_ROWS][j].filled,
-            color: originalGrid[i - NUM_OF_BUFFER_ROWS][j].color,
-          };
-        }
-      }
-
-      grid.push(row);
+  static createEmpty(
+    numOfRows: number,
+    numOfCols: number,
+    numOfBufferRows: number
+  ): Board {
+    if (numOfRows <= numOfBufferRows) {
+      throw new Error('`numOfRows` must be greater than `numOfBufferRows`.');
     }
 
-    return new Board(grid);
+    const grid = Array.from({ length: numOfRows }, () =>
+      Array.from({ length: numOfCols }, () => ({ filled: false, color: '' }))
+    );
+
+    return new Board(grid, numOfBufferRows);
+  }
+
+  static fromGrid(originalGrid: Cell[][], numOfBufferRows: number): Board {
+    const numOfRows = originalGrid.length;
+    const numOfCols = originalGrid[0].length;
+
+    if (numOfRows <= numOfBufferRows) {
+      throw new Error('The grid must include buffer rows.');
+    }
+
+    const grid: Cell[][] = Array.from({ length: numOfRows }, (_, i) =>
+      Array.from({ length: numOfCols }, (_, j) => ({
+        filled: originalGrid[i][j].filled,
+        color: originalGrid[i][j].color,
+      }))
+    );
+
+    return new Board(grid, numOfBufferRows);
   }
 
   /**
