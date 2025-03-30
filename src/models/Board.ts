@@ -28,15 +28,17 @@ export class Board {
   }
 
   static createEmpty(
-    numOfRows: number,
+    totalRowCount: number,
     numOfCols: number,
     numOfBufferRows: number
   ): Board {
-    if (numOfRows <= numOfBufferRows) {
-      throw new Error('`numOfRows` must be greater than `numOfBufferRows`.');
+    if (totalRowCount <= numOfBufferRows) {
+      throw new Error(
+        '`totalRowCount` must be greater than `numOfBufferRows`.'
+      );
     }
 
-    const grid = Array.from({ length: numOfRows }, () =>
+    const grid = Array.from({ length: totalRowCount }, () =>
       Array.from({ length: numOfCols }, () => ({ filled: false, color: '' }))
     );
 
