@@ -7,17 +7,19 @@ import type { Cell } from './Board';
 
 describe('Board', () => {
   describe('createEmpty', () => {
-    it('creates a board with an empty grid', () => {
-      const numOfRows = 20;
-      const numOfCols = 10;
-      const board = Board.createEmpty(numOfRows, numOfCols, BUFFER_ROW_COUNT);
-      const expectedGrid: Cell[][] = Array.from(
-        { length: numOfRows + BUFFER_ROW_COUNT },
-        () =>
-          Array.from({ length: numOfCols }, () => ({
-            filled: false,
-            color: '',
-          }))
+    it('creates a board instance with an empty grid of the specified number of rows and columns', () => {
+      const totalRowCount = 20 + BUFFER_ROW_COUNT;
+      const columnCount = 10;
+      const board = Board.createEmpty(
+        totalRowCount,
+        columnCount,
+        BUFFER_ROW_COUNT
+      );
+      const expectedGrid: Cell[][] = Array.from({ length: totalRowCount }, () =>
+        Array.from({ length: columnCount }, () => ({
+          filled: false,
+          color: '',
+        }))
       );
 
       expect(board).toBeInstanceOf(Board);
