@@ -108,11 +108,11 @@ export class Board {
 
   #clearLines(): number {
     const availableRowIndexQueue: number[] = [];
-    let clearedLines = 0;
+    let clearedLineCount = 0;
 
     for (let i = this.#totalRowCount - 1; i >= 0; i--) {
       if (this.#grid[i].every((col) => col.filled)) {
-        clearedLines += 1;
+        clearedLineCount += 1;
         availableRowIndexQueue.push(i);
 
         for (let j = 0; j < this.#columnCount; j++) {
@@ -141,7 +141,7 @@ export class Board {
       availableRowIndexQueue.push(i);
     }
 
-    return clearedLines;
+    return clearedLineCount;
   }
 
   get grid(): Cell[][] {
