@@ -10,7 +10,7 @@ describe('Board', () => {
     it('creates a board with an empty grid', () => {
       const numOfRows = 20;
       const numOfCols = 10;
-      const board = Board.createEmpty(numOfRows, numOfCols);
+      const board = Board.createEmpty(numOfRows, numOfCols, NUM_OF_BUFFER_ROWS);
       const expectedGrid: Cell[][] = Array.from(
         { length: numOfRows + NUM_OF_BUFFER_ROWS },
         () =>
