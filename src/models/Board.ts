@@ -15,15 +15,16 @@ export interface WithTetromino {
 }
 
 export class Board {
-  private readonly numOfRows: number;
-  private readonly numOfCols: number;
+  #grid: Cell[][];
+  readonly #numOfRows: number;
+  readonly #numOfCols: number;
+  readonly #numOfBufferRows: number;
 
-  private constructor(
-    private _grid: Cell[][],
-    private readonly numOfBufferRows: number
-  ) {
-    this.numOfRows = _grid.length;
-    this.numOfCols = _grid[0].length;
+  private constructor(grid: Cell[][], numOfBufferRows: number) {
+    this.#grid = grid;
+    this.#numOfRows = grid.length;
+    this.#numOfCols = grid[0].length;
+    this.#numOfBufferRows = numOfBufferRows;
   }
 
   static createEmpty(
@@ -69,18 +70,18 @@ export class Board {
     const blocks = currTetromino.getBlockPositions();
 
     for (const [i, j] of blocks) {
-      this._grid[i][j].filled = true;
-      this._grid[i][j].color = currTetromino.color;
+      this.#grid[i][j].filled = true;
+      this.#grid[i][j].color = currTetromino.color;
     }
 
-    return this.clearLines();
+    return this.#clearLines();
   }
 
   canMoveDown(tetromino: TetrominoState): boolean {
     const blocks = tetromino.getBlockPositions();
 
     for (const [i, j] of blocks) {
-      if (i + 1 === this.numOfRows || this._grid[i + 1][j].filled) {
+      if (i + 1 === this.#numOfRows || this.#grid[i + 1][j].filled) {
         return false;
       }
     }
@@ -93,10 +94,10 @@ export class Board {
 
     for (const [i, j] of blocks) {
       if (
-        i >= this.numOfRows ||
+        i >= this.#numOfRows ||
         j < 0 ||
-        j >= this.numOfCols ||
-        this._grid[i][j].filled
+        j >= this.#numOfCols ||
+        this.#grid[i][j].filled
       ) {
         return false;
       }
@@ -105,18 +106,18 @@ export class Board {
     return true;
   }
 
-  private clearLines(): number {
+  #clearLines(): number {
     const availableRowIndexQueue: number[] = [];
     let clearedLines = 0;
 
-    for (let i = this.numOfRows - 1; i >= 0; i--) {
-      if (this._grid[i].every((col) => col.filled)) {
+    for (let i = this.#numOfRows - 1; i >= 0; i--) {
+      if (this.#grid[i].every((col) => col.filled)) {
         clearedLines += 1;
         availableRowIndexQueue.push(i);
 
-        for (let j = 0; j < this.numOfCols; j++) {
-          this._grid[i][j].filled = false;
-          this._grid[i][j].color = '';
+        for (let j = 0; j < this.#numOfCols; j++) {
+          this.#grid[i][j].filled = false;
+          this.#grid[i][j].color = '';
         }
         continue;
       }
@@ -126,16 +127,16 @@ export class Board {
 
       let numOfUnfilledCells = 0;
 
-      for (let j = 0; j < this.numOfCols; j++) {
-        if (!this._grid[i][j].filled) numOfUnfilledCells++;
+      for (let j = 0; j < this.#numOfCols; j++) {
+        if (!this.#grid[i][j].filled) numOfUnfilledCells++;
 
-        this._grid[availableRowIndex][j].filled = this._grid[i][j].filled;
-        this._grid[availableRowIndex][j].color = this._grid[i][j].color;
-        this._grid[i][j].filled = false;
-        this._grid[i][j].color = '';
+        this.#grid[availableRowIndex][j].filled = this.#grid[i][j].filled;
+        this.#grid[availableRowIndex][j].color = this.#grid[i][j].color;
+        this.#grid[i][j].filled = false;
+        this.#grid[i][j].color = '';
       }
 
-      if (numOfUnfilledCells === this.numOfCols) break;
+      if (numOfUnfilledCells === this.#numOfCols) break;
 
       availableRowIndexQueue.push(i);
     }
@@ -143,7 +144,12 @@ export class Board {
     return clearedLines;
   }
 
-  get grid() {
-    return this._grid;
+  get grid(): Cell[][] {
+    return Array.from({ length: this.#numOfRows }, (_, i) =>
+      Array.from({ length: this.#numOfCols }, (_, j) => ({
+        filled: this.#grid[i][j].filled,
+        color: this.#grid[i][j].color,
+      }))
+    );
   }
 }
