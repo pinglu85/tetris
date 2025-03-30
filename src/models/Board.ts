@@ -43,9 +43,9 @@ export class Board {
     return new Board(grid, bufferRowCount);
   }
 
-  static fromGrid(originalGrid: Cell[][], bufferRowCount: number): Board {
-    const totalRowCount = originalGrid.length;
-    const columnCount = originalGrid[0].length;
+  static fromGrid(gridWithBufferRows: Cell[][], bufferRowCount: number): Board {
+    const totalRowCount = gridWithBufferRows.length;
+    const columnCount = gridWithBufferRows[0].length;
 
     if (totalRowCount <= bufferRowCount) {
       throw new Error('The grid must include buffer rows.');
@@ -53,8 +53,8 @@ export class Board {
 
     const grid: Cell[][] = Array.from({ length: totalRowCount }, (_, i) =>
       Array.from({ length: columnCount }, (_, j) => ({
-        filled: originalGrid[i][j].filled,
-        color: originalGrid[i][j].color,
+        filled: gridWithBufferRows[i][j].filled,
+        color: gridWithBufferRows[i][j].color,
       }))
     );
 
