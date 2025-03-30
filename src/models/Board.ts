@@ -17,50 +17,48 @@ export interface WithTetromino {
 export class Board {
   #grid: Cell[][];
   readonly #totalRowCount: number;
-  readonly #numOfCols: number;
-  readonly #numOfBufferRows: number;
+  readonly #columnCount: number;
+  readonly #bufferRowCount: number;
 
-  private constructor(grid: Cell[][], numOfBufferRows: number) {
+  private constructor(grid: Cell[][], bufferRowCount: number) {
     this.#grid = grid;
     this.#totalRowCount = grid.length;
-    this.#numOfCols = grid[0].length;
-    this.#numOfBufferRows = numOfBufferRows;
+    this.#columnCount = grid[0].length;
+    this.#bufferRowCount = bufferRowCount;
   }
 
   static createEmpty(
     totalRowCount: number,
-    numOfCols: number,
-    numOfBufferRows: number
+    columnCount: number,
+    bufferRowCount: number
   ): Board {
-    if (totalRowCount <= numOfBufferRows) {
-      throw new Error(
-        '`totalRowCount` must be greater than `numOfBufferRows`.'
-      );
+    if (totalRowCount <= bufferRowCount) {
+      throw new Error('`totalRowCount` must be greater than `bufferRowCount`.');
     }
 
     const grid = Array.from({ length: totalRowCount }, () =>
-      Array.from({ length: numOfCols }, () => ({ filled: false, color: '' }))
+      Array.from({ length: columnCount }, () => ({ filled: false, color: '' }))
     );
 
-    return new Board(grid, numOfBufferRows);
+    return new Board(grid, bufferRowCount);
   }
 
-  static fromGrid(originalGrid: Cell[][], numOfBufferRows: number): Board {
+  static fromGrid(originalGrid: Cell[][], bufferRowCount: number): Board {
     const totalRowCount = originalGrid.length;
-    const numOfCols = originalGrid[0].length;
+    const columnCount = originalGrid[0].length;
 
-    if (totalRowCount <= numOfBufferRows) {
+    if (totalRowCount <= bufferRowCount) {
       throw new Error('The grid must include buffer rows.');
     }
 
     const grid: Cell[][] = Array.from({ length: totalRowCount }, (_, i) =>
-      Array.from({ length: numOfCols }, (_, j) => ({
+      Array.from({ length: columnCount }, (_, j) => ({
         filled: originalGrid[i][j].filled,
         color: originalGrid[i][j].color,
       }))
     );
 
-    return new Board(grid, numOfBufferRows);
+    return new Board(grid, bufferRowCount);
   }
 
   /**
@@ -98,7 +96,7 @@ export class Board {
       if (
         i >= this.#totalRowCount ||
         j < 0 ||
-        j >= this.#numOfCols ||
+        j >= this.#columnCount ||
         this.#grid[i][j].filled
       ) {
         return false;
@@ -117,7 +115,7 @@ export class Board {
         clearedLines += 1;
         availableRowIndexQueue.push(i);
 
-        for (let j = 0; j < this.#numOfCols; j++) {
+        for (let j = 0; j < this.#columnCount; j++) {
           this.#grid[i][j].filled = false;
           this.#grid[i][j].color = '';
         }
@@ -127,10 +125,10 @@ export class Board {
       const availableRowIndex = availableRowIndexQueue.shift();
       if (availableRowIndex === undefined) continue;
 
-      let numOfUnfilledCells = 0;
+      let emptyCellCount = 0;
 
-      for (let j = 0; j < this.#numOfCols; j++) {
-        if (!this.#grid[i][j].filled) numOfUnfilledCells++;
+      for (let j = 0; j < this.#columnCount; j++) {
+        if (!this.#grid[i][j].filled) emptyCellCount++;
 
         this.#grid[availableRowIndex][j].filled = this.#grid[i][j].filled;
         this.#grid[availableRowIndex][j].color = this.#grid[i][j].color;
@@ -138,7 +136,7 @@ export class Board {
         this.#grid[i][j].color = '';
       }
 
-      if (numOfUnfilledCells === this.#numOfCols) break;
+      if (emptyCellCount === this.#columnCount) break;
 
       availableRowIndexQueue.push(i);
     }
@@ -148,7 +146,7 @@ export class Board {
 
   get grid(): Cell[][] {
     return Array.from({ length: this.#totalRowCount }, (_, i) =>
-      Array.from({ length: this.#numOfCols }, (_, j) => ({
+      Array.from({ length: this.#columnCount }, (_, j) => ({
         filled: this.#grid[i][j].filled,
         color: this.#grid[i][j].color,
       }))

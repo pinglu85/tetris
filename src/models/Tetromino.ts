@@ -10,7 +10,7 @@ export enum TetrominoTypes {
   L = 'L',
 }
 const TETROMINO_TYPES = Object.values(TetrominoTypes);
-const NUM_OF_TETROMINO_TYPES = TETROMINO_TYPES.length;
+const TETROMINO_TYPE_COUNT = TETROMINO_TYPES.length;
 
 type TetrominoBlocks = {
   [key in TetrominoTypes]: number[][]; // 4 x 2 matrix
@@ -61,7 +61,7 @@ const TETROMINO_BLOCKS: TetrominoBlocks = {
 };
 
 const COLORS = ['blue', 'green', 'navy', 'peach', 'pink', 'purple', 'yellow'];
-const NUM_OF_COLORS = COLORS.length;
+const COLOR_COUNT = COLORS.length;
 export type Colors = (typeof COLORS)[number];
 
 export class Tetromino {

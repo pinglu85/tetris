@@ -1,1 +1,1 @@
-export const NUM_OF_BUFFER_ROWS = 2;
+export const BUFFER_ROW_COUNT = 2;

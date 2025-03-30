@@ -22,11 +22,11 @@ export class DOMDisplay {
 
   constructor(
     root: HTMLElement,
-    numOfRows: number,
-    numOfCols: number,
+    rowCount: number,
+    columnCount: number,
     onPauseGame: () => void
   ) {
-    const gridElement = createGridElement(numOfRows * numOfCols);
+    const gridElement = createGridElement(rowCount * columnCount);
     this.cellElements = Array.from(
       gridElement.querySelectorAll(`.${CELL_CLASS_NAME}`)
     );
