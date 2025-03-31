@@ -32,8 +32,22 @@ export class Board {
     columnCount: number,
     bufferRowCount: number
   ): Board {
+    if (totalRowCount <= 0) {
+      throw new RangeError('`totalRowCount` must be positive.');
+    }
+
+    if (columnCount <= 0) {
+      throw new RangeError('`columnCount` must be positive.');
+    }
+
+    if (bufferRowCount <= 0) {
+      throw new RangeError('`bufferRowCount` must be positive.');
+    }
+
     if (totalRowCount <= bufferRowCount) {
-      throw new Error('`totalRowCount` must be greater than `bufferRowCount`.');
+      throw new RangeError(
+        '`totalRowCount` must be greater than `bufferRowCount`.'
+      );
     }
 
     const grid = Array.from({ length: totalRowCount }, () =>
