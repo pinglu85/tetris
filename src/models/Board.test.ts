@@ -25,5 +25,45 @@ describe('Board', () => {
       expect(board).toBeInstanceOf(Board);
       expect(board.grid).toStrictEqual(expectedGrid);
     });
+
+    it('throws an error if `totalRowCount` is less than `bufferRowCount`', () => {
+      const totalRowCount = 4;
+      const columnCount = 3;
+      const bufferRowCount = 5;
+
+      expect(() => {
+        Board.createEmpty(totalRowCount, columnCount, bufferRowCount);
+      }).toThrowError(RangeError);
+    });
+
+    it('throws an error if `totalRowCount` is not positive', () => {
+      const totalRowCount = 0;
+      const columnCount = 3;
+      const bufferRowCount = -3;
+
+      expect(() => {
+        Board.createEmpty(totalRowCount, columnCount, bufferRowCount);
+      }).toThrowError(RangeError);
+    });
+
+    it('throws an error if `columnCount` is not positive', () => {
+      const totalRowCount = 20;
+      const columnCount = 0;
+      const bufferRowCount = BUFFER_ROW_COUNT;
+
+      expect(() => {
+        Board.createEmpty(totalRowCount, columnCount, bufferRowCount);
+      }).toThrowError(RangeError);
+    });
+
+    it('throws an error if `bufferRowCount` is not positive', () => {
+      const totalRowCount = 20;
+      const columnCount = 10;
+      const bufferRowCount = 0;
+
+      expect(() => {
+        Board.createEmpty(totalRowCount, columnCount, bufferRowCount);
+      }).toThrowError(RangeError);
+    });
   });
 });
