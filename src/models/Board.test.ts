@@ -153,17 +153,48 @@ describe('Board', () => {
     });
 
     it('throws an error if the grid has inconsistent row lengths', () => {
-      const totalRowCount = 5;
-      const grid: Cell[][] = Array.from({ length: totalRowCount }, (_, i) =>
-        Array.from({ length: totalRowCount - i }, () => ({
-          filled: true,
-          color: Colors.BLUE,
-        }))
-      );
+      const grid: Cell[][] = [
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+        [{ filled: false, color: '' }],
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+      ];
 
       expect(() => {
         Board.fromGrid(grid, BUFFER_ROW_COUNT);
-      }).toThrowError('row lengths');
+      }).toThrowError(/rows?.*lengths?/);
     });
 
     it('throws an error when grid has fewer rows than `bufferRowCount`', () => {
