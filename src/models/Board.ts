@@ -45,7 +45,7 @@ export class Board {
     }
 
     if (totalRowCount < bufferRowCount) {
-      throw new RangeError(
+      throw new Error(
         '`totalRowCount` must be greater than or equal to `bufferRowCount`.'
       );
     }
