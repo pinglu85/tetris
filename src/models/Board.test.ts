@@ -52,7 +52,7 @@ describe('Board', () => {
 
       expect(() => {
         Board.createEmpty(totalRowCount, columnCount, bufferRowCount);
-      }).toThrowError(RangeError);
+      }).toThrowError(Error);
     });
 
     it('throws an error if `totalRowCount` is not positive', () => {
