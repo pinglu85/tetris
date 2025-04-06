@@ -40,8 +40,8 @@ export class Board {
       throw new RangeError('`columnCount` must be positive.');
     }
 
-    if (bufferRowCount <= 0) {
-      throw new RangeError('`bufferRowCount` must be positive.');
+    if (bufferRowCount < 0) {
+      throw new RangeError('`bufferRowCount` must be non-negative.');
     }
 
     if (totalRowCount < bufferRowCount) {
