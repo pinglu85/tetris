@@ -59,7 +59,10 @@ export class Board {
 
   static fromGrid(gridWithBufferRows: Cell[][], bufferRowCount: number): Board {
     const totalRowCount = gridWithBufferRows.length;
-    const columnCount = gridWithBufferRows[0].length;
+
+    if (totalRowCount === 0) {
+      throw new RangeError('The grid must have at least one row.');
+    }
 
     if (totalRowCount < bufferRowCount) {
       throw new Error(
@@ -67,12 +70,27 @@ export class Board {
       );
     }
 
-    const grid: Cell[][] = Array.from({ length: totalRowCount }, (_, i) =>
-      Array.from({ length: columnCount }, (_, j) => ({
-        filled: gridWithBufferRows[i][j].filled,
-        color: gridWithBufferRows[i][j].color,
-      }))
-    );
+    if (bufferRowCount < 0) {
+      throw new RangeError('`bufferRowCount` must be non-negative.');
+    }
+
+    const columnCount = gridWithBufferRows[0].length;
+    const grid: Cell[][] = new Array(totalRowCount);
+
+    for (let i = 0; i < totalRowCount; i++) {
+      if (gridWithBufferRows[i].length === 0) {
+        throw new RangeError('All grid rows must have at least one column.');
+      }
+
+      if (gridWithBufferRows[i].length !== columnCount) {
+        throw new Error('All grid rows must have the same length.');
+      }
+
+      grid[i] = new Array(columnCount);
+      for (let j = 0; j < columnCount; j++) {
+        grid[i][j] = { ...gridWithBufferRows[i][j] };
+      }
+    }
 
     return new Board(grid, bufferRowCount);
   }
