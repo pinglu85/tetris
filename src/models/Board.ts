@@ -44,9 +44,9 @@ export class Board {
       throw new RangeError('`bufferRowCount` must be positive.');
     }
 
-    if (totalRowCount <= bufferRowCount) {
+    if (totalRowCount < bufferRowCount) {
       throw new RangeError(
-        '`totalRowCount` must be greater than `bufferRowCount`.'
+        '`totalRowCount` must be greater than or equal to `bufferRowCount`.'
       );
     }
 
@@ -61,8 +61,10 @@ export class Board {
     const totalRowCount = gridWithBufferRows.length;
     const columnCount = gridWithBufferRows[0].length;
 
-    if (totalRowCount <= bufferRowCount) {
-      throw new Error('The grid must include buffer rows.');
+    if (totalRowCount < bufferRowCount) {
+      throw new Error(
+        'The grid row count must be greater than or equal to the buffer row count.'
+      );
     }
 
     const grid: Cell[][] = Array.from({ length: totalRowCount }, (_, i) =>
