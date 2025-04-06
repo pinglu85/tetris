@@ -5,6 +5,27 @@ import { BUFFER_ROW_COUNT } from '../constants';
 
 import type { Cell } from './Board';
 
+enum Colors {
+  BLUE = 'blue',
+  GREEN = 'green',
+  NAVY = 'navy',
+  PINK = 'pink',
+  YELLOW = 'yellow',
+  RED = 'red',
+  WHITE = 'white',
+}
+
+const CHARACTER_TO_CELL_STATE: Record<string, Cell> = {
+  '.': { filled: false, color: '' },
+  B: { filled: true, color: Colors.BLUE },
+  G: { filled: true, color: Colors.GREEN },
+  N: { filled: true, color: Colors.NAVY },
+  P: { filled: true, color: Colors.PINK },
+  Y: { filled: true, color: Colors.YELLOW },
+  R: { filled: true, color: Colors.RED },
+  W: { filled: true, color: Colors.WHITE },
+};
+
 describe('Board', () => {
   describe('createEmpty', () => {
     it('creates a board instance with an empty grid of the specified number of rows and columns', () => {
@@ -15,11 +36,9 @@ describe('Board', () => {
         columnCount,
         BUFFER_ROW_COUNT
       );
-      const expectedGrid: Cell[][] = Array.from({ length: totalRowCount }, () =>
-        Array.from({ length: columnCount }, () => ({
-          filled: false,
-          color: '',
-        }))
+      const expectedGrid: Cell[][] = createEmptyGrid(
+        totalRowCount,
+        columnCount
       );
 
       expect(board).toBeInstanceOf(Board);
@@ -49,10 +68,9 @@ describe('Board', () => {
     it('throws an error if `columnCount` is not positive', () => {
       const totalRowCount = 20;
       const columnCount = 0;
-      const bufferRowCount = BUFFER_ROW_COUNT;
 
       expect(() => {
-        Board.createEmpty(totalRowCount, columnCount, bufferRowCount);
+        Board.createEmpty(totalRowCount, columnCount, BUFFER_ROW_COUNT);
       }).toThrowError(RangeError);
     });
 
@@ -66,4 +84,114 @@ describe('Board', () => {
       }).toThrowError(RangeError);
     });
   });
+
+  describe('fromGrid', () => {
+    it('creates a board from a given grid', () => {
+      const gridString = `
+            . . W . . . . . . .
+            . . W . . . . . . .
+            . . W W . . . . Y Y
+            G . N . . R R . Y Y
+            G N N N . R R Y Y .
+            G G . P P P P . Y Y
+          `;
+      const grid = stringToGrid(gridString, BUFFER_ROW_COUNT);
+      const board = Board.fromGrid(grid, BUFFER_ROW_COUNT);
+
+      expect(board).toBeInstanceOf(Board);
+      expect(board.grid).toStrictEqual(grid);
+    });
+
+    it('throws an error if the grid is empty', () => {
+      const grid: Cell[][] = [];
+      const bufferRowCount = -1;
+
+      expect(() => {
+        Board.fromGrid(grid, bufferRowCount);
+      }).toThrowError(RangeError);
+    });
+
+    it('throws an error if the grid contains any empty rows', () => {
+      const totalRowCount = 20;
+      const columnCount = 10;
+
+      const grid: Cell[][] = Array.from({ length: totalRowCount }, (_, i) => {
+        return i % 2 === 0
+          ? []
+          : Array.from({ length: columnCount }, () => ({
+              filled: false,
+              color: '',
+            }));
+      });
+
+      expect(() => {
+        Board.fromGrid(grid, BUFFER_ROW_COUNT);
+      }).toThrowError(RangeError);
+    });
+
+    it('throws an error if the grid has inconsistent row lengths', () => {
+      const totalRowCount = 5;
+      const grid: Cell[][] = Array.from({ length: totalRowCount }, (_, i) =>
+        Array.from({ length: totalRowCount - i }, () => ({
+          filled: true,
+          color: Colors.BLUE,
+        }))
+      );
+
+      expect(() => {
+        Board.fromGrid(grid, BUFFER_ROW_COUNT);
+      }).toThrowError('row lengths');
+    });
+
+    it('throws an error when grid has fewer rows than `bufferRowCount`', () => {
+      const totalRowCount = 5;
+      const columnCount = 5;
+      const bufferRowCount = 6;
+      const grid: Cell[][] = createEmptyGrid(totalRowCount, columnCount);
+
+      expect(() => {
+        Board.fromGrid(grid, bufferRowCount);
+      }).toThrowError(Error);
+    });
+
+    it('throws an error if `bufferRowCount` is negative', () => {
+      const totalRowCount = 5;
+      const columnCount = 5;
+      const bufferRowCount = -1;
+      const grid: Cell[][] = createEmptyGrid(totalRowCount, columnCount);
+
+      expect(() => {
+        Board.fromGrid(grid, bufferRowCount);
+      }).toThrowError(RangeError);
+    });
+  });
 });
+
+function stringToGrid(gridString: string, bufferRowCount: number): Cell[][] {
+  const grid = gridString
+    .trim()
+    .split('\n')
+    .map((row) =>
+      row
+        .trim()
+        .split(' ')
+        .map((char) => CHARACTER_TO_CELL_STATE[char])
+    );
+
+  if (bufferRowCount === 0) return grid;
+
+  const bufferRows = Array.from({ length: bufferRowCount }, () =>
+    Array.from({ length: grid[0].length }, () => CHARACTER_TO_CELL_STATE['.'])
+  );
+
+  return [...bufferRows, ...grid];
+}
+
+function createEmptyGrid(totalRowCount: number, columnCount: number): Cell[][] {
+  return Array.from({ length: totalRowCount }, () =>
+    Array.from({ length: columnCount }, () => ({
+      filled: false,
+      color: '',
+    }))
+  );
+}
