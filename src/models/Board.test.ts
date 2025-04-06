@@ -74,10 +74,10 @@ describe('Board', () => {
       }).toThrowError(RangeError);
     });
 
-    it('throws an error if `bufferRowCount` is not positive', () => {
+    it('throws an error if `bufferRowCount` is negative', () => {
       const totalRowCount = 20;
       const columnCount = 10;
-      const bufferRowCount = 0;
+      const bufferRowCount = -1;
 
       expect(() => {
         Board.createEmpty(totalRowCount, columnCount, bufferRowCount);
