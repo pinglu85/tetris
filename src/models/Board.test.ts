@@ -112,17 +112,40 @@ describe('Board', () => {
     });
 
     it('throws an error if the grid contains any empty rows', () => {
-      const totalRowCount = 20;
-      const columnCount = 10;
-
-      const grid: Cell[][] = Array.from({ length: totalRowCount }, (_, i) => {
-        return i % 2 === 0
-          ? []
-          : Array.from({ length: columnCount }, () => ({
-              filled: false,
-              color: '',
-            }));
-      });
+      const grid: Cell[][] = [
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+        [],
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+        [],
+        [
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+          { filled: false, color: '' },
+        ],
+      ];
 
       expect(() => {
         Board.fromGrid(grid, BUFFER_ROW_COUNT);
