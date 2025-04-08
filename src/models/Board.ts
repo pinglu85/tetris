@@ -181,8 +181,7 @@ export class Board {
   get grid(): Cell[][] {
     return Array.from({ length: this.#totalRowCount }, (_, i) =>
       Array.from({ length: this.#columnCount }, (_, j) => ({
-        filled: this.#grid[i][j].filled,
-        color: this.#grid[i][j].color,
+        ...this.#grid[i][j],
       }))
     );
   }
