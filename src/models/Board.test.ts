@@ -242,6 +242,23 @@ describe('Board', () => {
       }).toThrowError(RangeError);
     });
   });
+
+  describe('grid getter', () => {
+    it('returns a deep copy of the internal grid', () => {
+      const board = Board.createEmpty(20, 10, BUFFER_ROW_COUNT);
+      const grid = board.grid;
+
+      expect(board.grid).not.toBe(grid);
+
+      for (let i = 0; i < grid.length; i++) {
+        expect(board.grid[i]).not.toBe(grid[i]);
+
+        for (let j = 0; j < grid[i].length; j++) {
+          expect(board.grid[i][j]).not.toBe(grid[i][j]);
+        }
+      }
+    });
+  });
 });
 
 function stringToGrid(gridString: string, bufferRowCount: number): Cell[][] {
