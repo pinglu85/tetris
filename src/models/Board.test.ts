@@ -120,7 +120,7 @@ describe('Board', () => {
         expect(board.grid[i]).not.toBe(grid[i]);
 
         for (let j = 0; j < grid[i].length; j++) {
-          expect(board.grid[i][j]).toEqual(grid[i][j]);
+          expect(board.grid[i][j]).not.toBe(grid[i][j]);
         }
       }
     });
