@@ -102,6 +102,29 @@ describe('Board', () => {
       expect(board.grid).toStrictEqual(grid);
     });
 
+    it('creates a deep copy of the input grid', () => {
+      const gridString = `
+            . . W . . . . . . .
+            . . W . . . . . . .
+            . . W W . . . . Y Y
+            G . N . . R R . Y Y
+            G N N N . R R Y Y .
+            G G . P P P P . Y Y
+          `;
+      const grid = stringToGrid(gridString, BUFFER_ROW_COUNT);
+      const board = Board.fromGrid(grid, BUFFER_ROW_COUNT);
+
+      expect(board.grid).not.toBe(grid);
+
+      for (let i = 0; i < grid.length; i++) {
+        expect(board.grid[i]).not.toBe(grid[i]);
+
+        for (let j = 0; j < grid[i].length; j++) {
+          expect(board.grid[i][j]).toEqual(grid[i][j]);
+        }
+      }
+    });
+
     it('throws an error if the grid is empty', () => {
       const grid: Cell[][] = [];
       const bufferRowCount = -1;
