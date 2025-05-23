@@ -52,7 +52,7 @@ export class DOMDisplay {
 
   syncState(state: State) {}
 
-  createGridElement(board: Board, currTetromino: Tetromino) {}
+  createGridElement(board: Board, currentTetromino: Tetromino) {}
 
   clearGrid() {}
 

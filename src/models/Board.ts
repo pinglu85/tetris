@@ -11,7 +11,7 @@ export type TetrominoState = Pick<
 >;
 
 export interface WithTetromino {
-  currTetromino: TetrominoState;
+  currentTetromino: TetrominoState;
 }
 
 export class Board {
@@ -100,12 +100,12 @@ export class Board {
    * @param {WithTetromino} state
    */
   update(state: WithTetromino): number {
-    const { currTetromino } = state;
-    const blocks = currTetromino.getBlockPositions();
+    const { currentTetromino } = state;
+    const blocks = currentTetromino.getBlockPositions();
 
     for (const [i, j] of blocks) {
       this.#grid[i][j].filled = true;
-      this.#grid[i][j].color = currTetromino.color;
+      this.#grid[i][j].color = currentTetromino.color;
     }
 
     return this.#clearLines();

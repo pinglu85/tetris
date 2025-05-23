@@ -8,13 +8,13 @@ export class State {
   private _level: number;
   private clearedLineCount: number;
   private _isGameOver: boolean;
-  private _currTetromino: Tetromino;
+  private _currentTetromino: Tetromino;
   private _nextTetromino: TetrominoPreview;
   private _board: Board;
 
   constructor(
     board: Board,
-    currTetromino: Tetromino,
+    currentTetromino: Tetromino,
     nextTetromino: TetrominoPreview,
     private readonly onTetrominoLock: () => void
   ) {
@@ -22,7 +22,7 @@ export class State {
     this._level = 0;
     this.clearedLineCount = 0;
     this._isGameOver = false;
-    this._currTetromino = currTetromino;
+    this._currentTetromino = currentTetromino;
     this._nextTetromino = nextTetromino;
     this._board = board;
   }
@@ -41,11 +41,11 @@ export class State {
     return this._isGameOver;
   }
 
-  get currTetromino() {
-    return this._currTetromino;
+  get currentTetromino() {
+    return this._currentTetromino;
   }
 
-  set currTetromino(tetromino: Tetromino) {}
+  set currentTetromino(tetromino: Tetromino) {}
 
   get nextTetromino() {
     return this._nextTetromino;
