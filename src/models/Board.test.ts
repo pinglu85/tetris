@@ -87,15 +87,17 @@ describe('Board', () => {
 
   describe('fromGrid', () => {
     it('creates a board from a given grid', () => {
-      const gridString = `
-            . . W . . . . . . .
-            . . W . . . . . . .
-            . . W W . . . . Y Y
-            G . N . . R R . Y Y
-            G N N N . R R Y Y .
-            G G . P P P P . Y Y
-          `;
-      const grid = stringToGrid(gridString, BUFFER_ROW_COUNT);
+      const grid = stringToGrid(
+        `
+          . . W . . . . . . .
+          . . W . . . . . . .
+          . . W W . . . . Y Y
+          G . N . . R R . Y Y
+          G N N N . R R Y Y .
+          G G . P P P P . Y Y
+        `,
+        BUFFER_ROW_COUNT
+      );
       const board = Board.fromGrid(grid, BUFFER_ROW_COUNT);
 
       expect(board).toBeInstanceOf(Board);
@@ -103,15 +105,17 @@ describe('Board', () => {
     });
 
     it('creates a deep copy of the input grid', () => {
-      const gridString = `
-            . . W . . . . . . .
-            . . W . . . . . . .
-            . . W W . . . . Y Y
-            G . N . . R R . Y Y
-            G N N N . R R Y Y .
-            G G . P P P P . Y Y
-          `;
-      const grid = stringToGrid(gridString, BUFFER_ROW_COUNT);
+      const grid = stringToGrid(
+        `
+          . . W . . . . . . .
+          . . W . . . . . . .
+          . . W W . . . . Y Y
+          G . N . . R R . Y Y
+          G N N N . R R Y Y .
+          G G . P P P P . Y Y
+        `,
+        BUFFER_ROW_COUNT
+      );
       const board = Board.fromGrid(grid, BUFFER_ROW_COUNT);
 
       expect(board.grid).not.toBe(grid);
