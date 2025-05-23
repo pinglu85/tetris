@@ -179,10 +179,6 @@ export class Board {
   }
 
   get grid(): Cell[][] {
-    return Array.from({ length: this.#totalRowCount }, (_, i) =>
-      Array.from({ length: this.#columnCount }, (_, j) => ({
-        ...this.#grid[i][j],
-      }))
-    );
+    return structuredClone(this.#grid);
   }
 }
