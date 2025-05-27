@@ -129,7 +129,7 @@ describe('Board', () => {
       }
     });
 
-    it('throws an error if the grid is empty', () => {
+    it('throws an error if the grid is an empty array', () => {
       const grid: Cell[][] = [];
       const bufferRowCount = -1;
 
@@ -138,7 +138,7 @@ describe('Board', () => {
       }).toThrowError(RangeError);
     });
 
-    it('throws an error if the grid contains any empty rows', () => {
+    it('throws an error if the grid contains any empty arrays as rows', () => {
       const grid: Cell[][] = [
         [
           { filled: false, color: '' },
