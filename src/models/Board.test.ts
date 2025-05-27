@@ -245,6 +245,63 @@ describe('Board', () => {
         Board.fromGrid(grid, bufferRowCount);
       }).toThrowError(RangeError);
     });
+
+    it('throws an error if the grid contains any completed lines', () => {
+      const grid = stringToGrid(
+        `
+          . . . . . . . . . .
+          . . W . . . . . . .
+          . . W W W W . . . .
+          N N W W R R R N Y Y
+          G . N N N R R N Y Y
+          G N N N . R R Y Y .
+          G G . P P P P . Y Y
+        `,
+        BUFFER_ROW_COUNT
+      );
+
+      expect(() => {
+        Board.fromGrid(grid, BUFFER_ROW_COUNT);
+      }).toThrowError();
+    });
+
+    it('throws an error if any "floating island" of filled cells exists', () => {
+      const grid = stringToGrid(
+        `
+          . . . . . . . . . .
+          . . W . . . . . . .
+          . . W R R . . . . .
+          N N W . R R . N N N
+          . . . . . . . . . N
+          N N N N . R R Y Y .
+          G G . P P P P . Y Y
+        `,
+        BUFFER_ROW_COUNT
+      );
+
+      expect(() => {
+        Board.fromGrid(grid, BUFFER_ROW_COUNT);
+      }).toThrowError();
+    });
+
+    it('throws an error if any row except the bottom one has at least 4 consecutive filled cells, where no cell in that group is supported by a filled cell directly below it.', () => {
+      const grid = stringToGrid(
+        `
+          . . . . . . . . . .
+          . . W . . . . . . .
+          . . W W W W . . . .
+          N N W W R R R R . .
+          . . . . R . . . . .
+          N N N . R R R Y Y .
+          G G . P P P P . Y Y
+        `,
+        BUFFER_ROW_COUNT
+      );
+
+      expect(() => {
+        Board.fromGrid(grid, BUFFER_ROW_COUNT);
+      }).toThrowError();
+    });
   });
 
   describe('grid getter', () => {
