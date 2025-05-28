@@ -178,7 +178,7 @@ export class Board {
     return clearedLineCount;
   }
 
-  get grid(): Cell[][] {
-    return structuredClone(this.#grid);
+  get grid(): readonly (readonly Readonly<Cell>[])[] {
+    return this.#grid;
   }
 }
