@@ -87,8 +87,15 @@ export class Board {
       }
 
       grid[i] = new Array(columnCount);
+      let filledCellCount = 0;
       for (let j = 0; j < columnCount; j++) {
         grid[i][j] = { ...gridWithBufferRows[i][j] };
+
+        if (grid[i][j].filled) filledCellCount += 1;
+      }
+
+      if (filledCellCount === columnCount) {
+        throw new Error('Grid should not contain any completed lines.');
       }
     }
 
