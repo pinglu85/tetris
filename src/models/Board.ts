@@ -5,7 +5,7 @@ export interface Cell {
   color: string;
 }
 
-export type TetrominoState = Pick<
+export type TetrominoLike = Pick<
   Tetromino,
   'getBlockPositions' | 'isLocked' | 'color'
 >;
@@ -98,7 +98,7 @@ export class Board {
     return new Board(grid, bufferRowCount);
   }
 
-  integrateLockedTetromino(tetromino: TetrominoState): void {
+  integrateLockedTetromino(tetromino: TetrominoLike): void {
     const blocks = tetromino.getBlockPositions();
 
     for (const [i, j] of blocks) {
@@ -107,7 +107,7 @@ export class Board {
     }
   }
 
-  canMoveDown(tetromino: TetrominoState): boolean {
+  canMoveDown(tetromino: TetrominoLike): boolean {
     const blocks = tetromino.getBlockPositions();
 
     for (const [i, j] of blocks) {
@@ -119,7 +119,7 @@ export class Board {
     return true;
   }
 
-  isValidPosition(tetromino: TetrominoState): boolean {
+  isValidPosition(tetromino: TetrominoLike): boolean {
     const blocks = tetromino.getBlockPositions();
 
     for (const [i, j] of blocks) {
