@@ -10,10 +10,6 @@ export type TetrominoState = Pick<
   'getBlockPositions' | 'isLocked' | 'color'
 >;
 
-export interface WithTetromino {
-  currentTetromino: TetrominoState;
-}
-
 export class Board {
   #grid: Cell[][];
   readonly #totalRowCount: number;
@@ -102,20 +98,13 @@ export class Board {
     return new Board(grid, bufferRowCount);
   }
 
-  /**
-   * Integrate the locked tetromino into its grid and clear lines.
-   * @param {WithTetromino} state
-   */
-  update(state: WithTetromino): number {
-    const { currentTetromino } = state;
-    const blocks = currentTetromino.getBlockPositions();
+  integrateLockedTetromino(tetromino: TetrominoState): void {
+    const blocks = tetromino.getBlockPositions();
 
     for (const [i, j] of blocks) {
       this.#grid[i][j].filled = true;
-      this.#grid[i][j].color = currentTetromino.color;
+      this.#grid[i][j].color = tetromino.color;
     }
-
-    return this.#clearLines();
   }
 
   canMoveDown(tetromino: TetrominoState): boolean {
@@ -147,7 +136,7 @@ export class Board {
     return true;
   }
 
-  #clearLines(): number {
+  clearLines(): number {
     const availableRowIndexQueue: number[] = [];
     let clearedLineCount = 0;
 
