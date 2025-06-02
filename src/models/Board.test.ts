@@ -4,6 +4,8 @@ import { Board } from './Board';
 import { BUFFER_ROW_COUNT } from '../constants';
 
 import type { Cell, TetrominoLike } from './Board';
+import type { BlockPositions } from './Tetromino';
+import type { Position } from '../types';
 
 enum Colors {
   BLUE = 'blue',
@@ -455,7 +457,20 @@ describe('Board', () => {
       }).toThrowError();
     });
 
-    it.each([
+    type BoundaryTestCase = [
+      name: string,
+      tetrominoInfo: {
+        blockOffsets: BlockPositions;
+        pivotPosition: Position;
+      },
+      gridInfo: {
+        totalRowCount: number;
+        columnCount: number;
+        bufferRowCount: number;
+      }
+    ];
+
+    it.each<BoundaryTestCase>([
       [
         'left boundary',
         {
@@ -566,7 +581,19 @@ describe('Board', () => {
       }
     );
 
-    it.each([
+    type OverlapTestCase = [
+      name: string,
+      tetrominoInfo: {
+        blockOffsets: BlockPositions;
+        pivotPosition: Position;
+      },
+      gridInfo: {
+        grid: Cell[][];
+        bufferRowCount: number;
+      }
+    ];
+
+    it.each<OverlapTestCase>([
       [
         'to its left',
         {
@@ -753,12 +780,12 @@ function createEmptyGrid(totalRowCount: number, columnCount: number): Cell[][] {
 }
 
 function mockGetBlockPosition(
-  blockOffsets: number[][],
-  pivotPosition: number[]
-): () => number[][] {
+  blockOffsets: BlockPositions,
+  pivotPosition: Position
+): () => BlockPositions {
   return () =>
     blockOffsets.map(([offsetX, offsetY]) => [
       offsetX + pivotPosition[0],
       offsetY + pivotPosition[1],
-    ]);
+    ]) as BlockPositions;
 }

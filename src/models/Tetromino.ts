@@ -1,3 +1,4 @@
+import type { Position } from '../types';
 import type { State } from './State';
 
 export enum TetrominoTypes {
@@ -12,8 +13,9 @@ export enum TetrominoTypes {
 const TETROMINO_TYPES = Object.values(TetrominoTypes);
 const TETROMINO_TYPE_COUNT = TETROMINO_TYPES.length;
 
+export type BlockPositions = [Position, Position, Position, Position];
 type TetrominoBlocks = {
-  [key in TetrominoTypes]: number[][]; // 4 x 2 matrix
+  [key in TetrominoTypes]: BlockPositions;
 };
 const TETROMINO_BLOCKS: TetrominoBlocks = {
   [TetrominoTypes.I]: [
@@ -66,8 +68,8 @@ export type Colors = (typeof COLORS)[number];
 
 export class Tetromino {
   private _color: Colors;
-  private _blocks: number[][]; // 4 x 2 matrix
-  private _pivotPosition: number[]; // [row, col]
+  private readonly _blocks: BlockPositions;
+  private _pivotPosition: Position;
   private isDownPressed: boolean;
   private _isLocked: boolean;
   private readonly DAS: number; // Delayed Auto Shift
@@ -78,13 +80,13 @@ export class Tetromino {
    * Create a Tetromino.
    * @param {TetrominoTypes} type
    * @param {Colors} color
-   * @param {number[]} pivotPosition - [row, col]
+   * @param {Position} pivotPosition - [x, y]
    * @param {number} level -  non-negative integer
    */
   constructor(
     private readonly type: TetrominoTypes,
     color: Colors,
-    pivotPosition: number[],
+    pivotPosition: Position,
     level: number
   ) {
     this._color = color;
@@ -99,11 +101,11 @@ export class Tetromino {
 
   update(elapsedTime: number, state: State, keys: Record<string, boolean>) {}
 
-  getBlockPositions(): number[][] {
+  getBlockPositions(): BlockPositions {
     return this._blocks.map(([offsetX, offsetY]) => [
       offsetX + this._pivotPosition[0],
       offsetY + this._pivotPosition[1],
-    ]);
+    ]) as BlockPositions;
   }
 
   private moveDown() {}

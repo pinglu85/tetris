@@ -1,4 +1,5 @@
 import type { Tetromino } from './Tetromino';
+import type { Position } from '../types';
 
 export interface Cell {
   filled: boolean;
@@ -133,7 +134,7 @@ export class Board {
     }
   }
 
-  isValidPosition([i, j]: number[]): boolean {
+  isValidPosition([i, j]: Position): boolean {
     if (
       i < 0 ||
       i >= this.#totalRowCount ||
