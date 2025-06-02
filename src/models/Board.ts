@@ -46,7 +46,7 @@ export class Board {
       );
     }
 
-    const grid = Array.from({ length: totalRowCount }, () =>
+    const grid: Cell[][] = Array.from({ length: totalRowCount }, () =>
       Array.from({ length: columnCount }, () => ({ filled: false, color: '' }))
     );
 
