@@ -562,7 +562,7 @@ describe('Board', () => {
 
         expect(() => {
           board.integrateLockedTetromino(tetromino);
-        }).toThrowError(/bound/);
+        }).toThrowError(/tetromino/);
       }
     );
 
