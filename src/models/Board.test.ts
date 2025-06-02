@@ -287,7 +287,7 @@ describe('Board', () => {
             `,
         BUFFER_ROW_COUNT
       );
-      const tetromino: TetrominoLike = {
+      const tetromino = {
         color: Colors.BLUE,
         isLocked: true,
         getBlockPositions: mockGetBlockPosition(
@@ -329,7 +329,7 @@ describe('Board', () => {
             `,
         BUFFER_ROW_COUNT
       );
-      const tetromino: TetrominoLike = {
+      const tetromino = {
         color: Colors.GREEN,
         isLocked: true,
         getBlockPositions: mockGetBlockPosition(
@@ -361,7 +361,7 @@ describe('Board', () => {
        *   B B
        *   B
        */
-      const tetromino: TetrominoLike = {
+      const tetromino = {
         color: Colors.BLUE,
         isLocked: false,
         getBlockPositions: mockGetBlockPosition(
@@ -395,7 +395,7 @@ describe('Board', () => {
        *  B
        *  B
        */
-      const tetromino: TetrominoLike = {
+      const tetromino = {
         color: Colors.BLUE,
         isLocked: true,
         getBlockPositions: mockGetBlockPosition(
@@ -438,7 +438,7 @@ describe('Board', () => {
        *    G N N N . R R Y Y .
        *    G G . P P P P . Y Y
        */
-      const tetromino: TetrominoLike = {
+      const tetromino = {
         color: Colors.BLUE,
         isLocked: true,
         getBlockPositions: mockGetBlockPosition(
@@ -569,7 +569,7 @@ describe('Board', () => {
           bufferRowCount
         );
         const { blockOffsets, pivotPosition } = tetrominoInfo;
-        const tetromino: TetrominoLike = {
+        const tetromino = {
           color: Colors.BLUE,
           isLocked: true,
           getBlockPositions: mockGetBlockPosition(blockOffsets, pivotPosition),
@@ -724,7 +724,7 @@ describe('Board', () => {
       (_, tetrominoInfo, gridInfo) => {
         const board = Board.fromGrid(gridInfo.grid, gridInfo.bufferRowCount);
         const { blockOffsets, pivotPosition } = tetrominoInfo;
-        const tetromino: TetrominoLike = {
+        const tetromino = {
           color: Colors.BLUE,
           isLocked: true,
           getBlockPositions: mockGetBlockPosition(blockOffsets, pivotPosition),
@@ -735,18 +735,6 @@ describe('Board', () => {
         }).toThrowError();
       }
     );
-  });
-
-  describe('clearLines', () => {
-    it('clears a single complete line', () => {});
-
-    it('clears multiple continuous complete lines', () => {});
-
-    it('clears a single complete line and shifts the above rows down', () => {});
-
-    it('clears multiple continuous complete lines and shifts the above rows down', () => {});
-
-    it('clears multiple complete lines separated by incomplete lines and shifts all the incomplete rows correctly down', () => {});
   });
 });
 
