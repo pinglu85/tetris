@@ -99,7 +99,33 @@ export class Board {
   }
 
   integrateLockedTetromino(tetromino: TetrominoLike): void {
+    if (!tetromino.isLocked) {
+      throw new Error('The tetromino must be locked.');
+    }
+
     const blocks = tetromino.getBlockPositions();
+    let isFloating = true;
+
+    for (const block of blocks) {
+      if (!this.isValidPosition(block)) {
+        throw new Error('Invalid tetromino position.');
+      }
+
+      const [i, j] = block;
+      if (i < this.#bufferRowCount) {
+        throw new Error('The tetromino must not be in the buffer row(s).');
+      }
+
+      if (i === this.#totalRowCount - 1 || this.#grid[i + 1][j].filled) {
+        isFloating = false;
+      }
+    }
+
+    if (isFloating) {
+      throw new Error(
+        'The tetromino must rest on the ground or another block.'
+      );
+    }
 
     for (const [i, j] of blocks) {
       this.#grid[i][j].filled = true;
@@ -107,30 +133,15 @@ export class Board {
     }
   }
 
-  canMoveDown(tetromino: TetrominoLike): boolean {
-    const blocks = tetromino.getBlockPositions();
-
-    for (const [i, j] of blocks) {
-      if (i + 1 === this.#totalRowCount || this.#grid[i + 1][j].filled) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  isValidPosition(tetromino: TetrominoLike): boolean {
-    const blocks = tetromino.getBlockPositions();
-
-    for (const [i, j] of blocks) {
-      if (
-        i >= this.#totalRowCount ||
-        j < 0 ||
-        j >= this.#columnCount ||
-        this.#grid[i][j].filled
-      ) {
-        return false;
-      }
+  isValidPosition([i, j]: number[]): boolean {
+    if (
+      i < 0 ||
+      i >= this.#totalRowCount ||
+      j < 0 ||
+      j >= this.#columnCount ||
+      this.#grid[i][j].filled
+    ) {
+      return false;
     }
 
     return true;
