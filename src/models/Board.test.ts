@@ -736,6 +736,285 @@ describe('Board', () => {
       }
     );
   });
+
+  describe('clearLines', () => {
+    it('clears a single complete line', () => {
+      const grid = stringToGrid(
+        `
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . . . . . . . . . .
+          N N N N R R R R . .
+          G . B . P P P . . .
+        `,
+        BUFFER_ROW_COUNT
+      );
+      const board = Board.fromGrid(grid, BUFFER_ROW_COUNT);
+      /**
+       *  Locked tetromino:
+       *   B B
+       *   B B
+       */
+      const tetromino: TetrominoLike = {
+        isLocked: true,
+        color: Colors.BLUE,
+        getBlockPositions: mockGetBlockPosition(
+          [
+            [-1, 0],
+            [-1, 1],
+            [0, 0],
+            [0, 1],
+          ],
+          [4 + BUFFER_ROW_COUNT, 8]
+        ),
+      };
+      const expectedGrid = stringToGrid(
+        `
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . . . . . . . . . .
+          G . B . P P P . B B
+        `,
+        BUFFER_ROW_COUNT
+      );
+      const expectedLineClearCount = 1;
+
+      board.integrateLockedTetromino(tetromino);
+      const lineClearCount = board.clearLines();
+      expect(lineClearCount).toBe(expectedLineClearCount);
+      expect(board.grid).toStrictEqual(expectedGrid);
+    });
+
+    it('clears multiple continuous complete lines', () => {
+      const grid = stringToGrid(
+        `
+          . . . . . . . . . .
+          P P W W W Y Y N . .
+          P P W G G Y R N N .
+          N N N G G Y R R N .
+          G N B B B P R P . .
+        `,
+        BUFFER_ROW_COUNT
+      );
+      const board = Board.fromGrid(grid, BUFFER_ROW_COUNT);
+      /**
+       *  Locked tetromino:
+       *   B B
+       *     B
+       * v   B
+       */
+      const tetromino: TetrominoLike = {
+        isLocked: true,
+        color: Colors.BLUE,
+        getBlockPositions: mockGetBlockPosition(
+          [
+            [-1, -1],
+            [-1, 0],
+            [0, 0],
+            [1, 0],
+          ],
+          [2 + BUFFER_ROW_COUNT, 9]
+        ),
+      };
+      const expectedGrid = stringToGrid(
+        `
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . . . . . . . . . .
+          G N B B B P R P . .
+        `,
+        BUFFER_ROW_COUNT
+      );
+      const expectedLineClearCount = 3;
+
+      board.integrateLockedTetromino(tetromino);
+      const lineClearCount = board.clearLines();
+      expect(lineClearCount).toBe(expectedLineClearCount);
+      expect(board.grid).toStrictEqual(expectedGrid);
+    });
+
+    it('clears a single complete line and shifts the above rows down', () => {
+      const grid = stringToGrid(
+        `
+          . . . . . . . . . 
+          . . . . . . . . . 
+          . G . . . N . . . 
+          . G G G . N N N . 
+          P P P P Y Y Y Y . 
+          N . . . R . . . .
+        `,
+        BUFFER_ROW_COUNT
+      );
+      const board = Board.fromGrid(grid, BUFFER_ROW_COUNT);
+      /**
+       *  Locked tetromino:
+       *   B
+       *   B
+       *   B
+       *   B
+       */
+      const tetromino: TetrominoLike = {
+        isLocked: true,
+        color: Colors.BLUE,
+        getBlockPositions: mockGetBlockPosition(
+          [
+            [-2, 0],
+            [-1, 0],
+            [0, 0],
+            [1, 0],
+          ],
+          [4 + BUFFER_ROW_COUNT, 8]
+        ),
+      };
+      const expectedGrid = stringToGrid(
+        `
+          . . . . . . . . . 
+          . . . . . . . . . 
+          . . . . . . . . . 
+          . G . . . N . . B 
+          . G G G . N N N B 
+          N . . . R . . . B
+        `,
+        BUFFER_ROW_COUNT
+      );
+      const expectedLineClearCount = 1;
+
+      board.integrateLockedTetromino(tetromino);
+      const lineClearCount = board.clearLines();
+      expect(lineClearCount).toBe(expectedLineClearCount);
+      expect(board.grid).toStrictEqual(expectedGrid);
+    });
+
+    it('clears multiple continuous complete lines and shifts the above rows down', () => {
+      const grid = stringToGrid(
+        `
+          . . . . . . . . . .
+          . . . . . . . . . .
+          P P . . . . W W Y .
+          P . . . G G W W Y Y
+          P N . G G N N N N Y
+          R N . P P P P G G G
+          R R . N N N N B B G
+          R P . N N N N B W W
+          P P . . . . G B W .
+          P N N R R G G . W .
+          N N N R R G W B B .
+        `,
+        BUFFER_ROW_COUNT
+      );
+      const board = Board.fromGrid(grid, BUFFER_ROW_COUNT);
+      /**
+       *  Locked tetromino:
+       *   B
+       *   B
+       *   B
+       *   B
+       */
+      const tetromino: TetrominoLike = {
+        isLocked: true,
+        color: Colors.BLUE,
+        getBlockPositions: mockGetBlockPosition(
+          [
+            [-2, 0],
+            [-1, 0],
+            [0, 0],
+            [1, 0],
+          ],
+          [7 + BUFFER_ROW_COUNT, 2]
+        ),
+      };
+      const expectedGrid = stringToGrid(
+        `
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . . . . . . . . . .
+          P P . . . . W W Y .
+          P . . . G G W W Y Y
+          P N . G G N N N N Y
+          P P B . . . G B W .
+          P N N R R G G . W .
+          N N N R R G W B B .
+        `,
+        BUFFER_ROW_COUNT
+      );
+      const expectedLineClearCount = 3;
+
+      board.integrateLockedTetromino(tetromino);
+      const lineClearCount = board.clearLines();
+      expect(lineClearCount).toBe(expectedLineClearCount);
+      expect(board.grid).toStrictEqual(expectedGrid);
+    });
+
+    it('clears multiple complete lines separated by incomplete lines and shifts all the incomplete rows correctly down', () => {
+      const grid = stringToGrid(
+        `
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . B B N . . . . . .
+          N B N N R R . . P .
+          N B N N B R R P P .
+          N N N N B B B G P .
+          N N N N N N N G G .
+          N N P P P . . . G .
+          N N P P B B B B B .
+          N P P P B . . . B .
+          N G G P B R R . G G
+          B Y Y B B B . B N N
+        `,
+        BUFFER_ROW_COUNT
+      );
+      const board = Board.fromGrid(grid, BUFFER_ROW_COUNT);
+      /**
+       *  Locked tetromino:
+       *   N
+       *   N
+       *   N
+       *   N
+       */
+      const tetromino: TetrominoLike = {
+        isLocked: true,
+        color: Colors.NAVY,
+        getBlockPositions: mockGetBlockPosition(
+          [
+            [-2, 0],
+            [-1, 0],
+            [0, 0],
+            [1, 0],
+          ],
+          [9 + BUFFER_ROW_COUNT, 9]
+        ),
+      };
+      const expectedGrid = stringToGrid(
+        `
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . . . . . . . . . .
+          . B B N . . . . . .
+          N B N N R R . . P .
+          N B N N B R R P P .
+          N N N N B B B G P .
+          N N P P P . . . G N
+          N P P P B . . . B N
+          N G G P B R R . G G
+          B Y Y B B B . B N N
+        `,
+        BUFFER_ROW_COUNT
+      );
+      const expectedLineClearCount = 2;
+
+      board.integrateLockedTetromino(tetromino);
+      const lineClearCount = board.clearLines();
+      expect(lineClearCount).toBe(expectedLineClearCount);
+      expect(board.grid).toStrictEqual(expectedGrid);
+    });
+  });
 });
 
 function stringToGrid(gridString: string, bufferRowCount: number): Cell[][] {
