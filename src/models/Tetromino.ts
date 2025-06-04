@@ -66,15 +66,16 @@ const COLORS = ['blue', 'green', 'navy', 'peach', 'pink', 'purple', 'yellow'];
 const COLOR_COUNT = COLORS.length;
 export type Colors = (typeof COLORS)[number];
 
+const DELAYED_AUTO_SHIFT = 200; // 200ms
+const HARD_DROP_INTERVAL = 50; // 50ms
+
 export class Tetromino {
   private _color: Colors;
   private readonly _blocks: BlockPositions;
   private _pivotPosition: Position;
   private isDownPressed: boolean;
   private _isLocked: boolean;
-  private readonly DAS: number; // Delayed Auto Shift
   private readonly fallInterval: number;
-  private readonly hardDropInterval: number;
 
   /**
    * Create a Tetromino.
@@ -94,9 +95,7 @@ export class Tetromino {
     this._pivotPosition = pivotPosition;
     this.isDownPressed = false;
     this._isLocked = false;
-    this.DAS = 200; // 200ms
     this.fallInterval = 1000 - 50 * level;
-    this.hardDropInterval = 50;
   }
 
   update(elapsedTime: number, state: State, keys: Record<string, boolean>) {}
