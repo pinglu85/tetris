@@ -70,12 +70,13 @@ const DELAYED_AUTO_SHIFT = 200; // 200ms
 const HARD_DROP_INTERVAL = 50; // 50ms
 
 export class Tetromino {
-  private _color: Colors;
-  private readonly _blocks: BlockPositions;
-  private _pivotPosition: Position;
-  private isDownPressed: boolean;
-  private _isLocked: boolean;
-  private readonly fallInterval: number;
+  readonly #type: TetrominoTypes;
+  readonly #color: Colors;
+  readonly #blocks: BlockPositions;
+  #pivotPosition: Position;
+  #isDownPressed: boolean;
+  #isLocked: boolean;
+  readonly #fallInterval: number;
 
   /**
    * Create a Tetromino.
@@ -85,25 +86,26 @@ export class Tetromino {
    * @param {number} level -  non-negative integer
    */
   constructor(
-    private readonly type: TetrominoTypes,
+    type: TetrominoTypes,
     color: Colors,
     pivotPosition: Position,
     level: number
   ) {
-    this._color = color;
-    this._blocks = TETROMINO_BLOCKS[type];
-    this._pivotPosition = pivotPosition;
-    this.isDownPressed = false;
-    this._isLocked = false;
-    this.fallInterval = 1000 - 50 * level;
+    this.#type = type;
+    this.#color = color;
+    this.#blocks = TETROMINO_BLOCKS[type];
+    this.#pivotPosition = pivotPosition;
+    this.#isDownPressed = false;
+    this.#isLocked = false;
+    this.#fallInterval = 1000 - 50 * level;
   }
 
   update(elapsedTime: number, state: State, keys: Record<string, boolean>) {}
 
   getBlockPositions(): BlockPositions {
-    return this._blocks.map(([offsetX, offsetY]) => [
-      offsetX + this._pivotPosition[0],
-      offsetY + this._pivotPosition[1],
+    return this.#blocks.map(([offsetX, offsetY]) => [
+      offsetX + this.#pivotPosition[0],
+      offsetY + this.#pivotPosition[1],
     ]) as BlockPositions;
   }
 
@@ -116,11 +118,11 @@ export class Tetromino {
   private rotate(direction = 'clockwise') {}
 
   get isLocked() {
-    return this._isLocked;
+    return this.#isLocked;
   }
 
   get color() {
-    return this._color;
+    return this.#color;
   }
 }
 
