@@ -15,32 +15,32 @@ const SCORE_INFO_VALUE_ID = 'score';
 const LEVEL_INFO_VALUE_ID = 'level';
 
 export class DOMDisplay {
-  #cellElements: HTMLElement[];
-  #levelValueElement: HTMLElement;
-  #scoreValueElement: HTMLElement;
-  #nextTetrominoCellElements: HTMLElement[];
+  private cellElements: HTMLElement[];
+  private levelValueElement: HTMLElement;
+  private scoreValueElement: HTMLElement;
+  private nextTetrominoCellElements: HTMLElement[];
 
   constructor(
     root: HTMLElement,
-    numOfRows: number,
-    numOfCols: number,
+    rowCount: number,
+    columnCount: number,
     onPauseGame: () => void
   ) {
-    const gridElement = createGridElement(numOfRows * numOfCols);
-    this.#cellElements = Array.from(
+    const gridElement = createGridElement(rowCount * columnCount);
+    this.cellElements = Array.from(
       gridElement.querySelectorAll(`.${CELL_CLASS_NAME}`)
     );
 
     const gameInfoPanelElement = createGameInfoPanelElement();
 
-    this.#nextTetrominoCellElements = Array.from(
+    this.nextTetrominoCellElements = Array.from(
       gameInfoPanelElement.querySelectorAll(`.${CELL_CLASS_NAME}`)
     );
 
-    this.#scoreValueElement = gameInfoPanelElement.querySelector(
+    this.scoreValueElement = gameInfoPanelElement.querySelector(
       `#${SCORE_INFO_VALUE_ID}`
     ) as HTMLElement;
-    this.#levelValueElement = gameInfoPanelElement.querySelector(
+    this.levelValueElement = gameInfoPanelElement.querySelector(
       `#${LEVEL_INFO_VALUE_ID}`
     ) as HTMLElement;
 
@@ -52,7 +52,7 @@ export class DOMDisplay {
 
   syncState(state: State) {}
 
-  createGridElement(board: Board, currTetromino: Tetromino) {}
+  createGridElement(board: Board, currentTetromino: Tetromino) {}
 
   clearGrid() {}
 

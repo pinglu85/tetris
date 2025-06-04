@@ -1,3 +1,4 @@
+import type { Position } from '../types';
 import type { State } from './State';
 
 export enum TetrominoTypes {
@@ -10,10 +11,11 @@ export enum TetrominoTypes {
   L = 'L',
 }
 const TETROMINO_TYPES = Object.values(TetrominoTypes);
-const NUM_OF_TETROMINO_TYPES = TETROMINO_TYPES.length;
+const TETROMINO_TYPE_COUNT = TETROMINO_TYPES.length;
 
+export type BlockPositions = [Position, Position, Position, Position];
 type TetrominoBlocks = {
-  [key in TetrominoTypes]: number[][]; // 4 x 2 matrix
+  [key in TetrominoTypes]: BlockPositions;
 };
 const TETROMINO_BLOCKS: TetrominoBlocks = {
   [TetrominoTypes.I]: [
@@ -61,64 +63,65 @@ const TETROMINO_BLOCKS: TetrominoBlocks = {
 };
 
 const COLORS = ['blue', 'green', 'navy', 'peach', 'pink', 'purple', 'yellow'];
-const NUM_OF_COLORS = COLORS.length;
+const COLOR_COUNT = COLORS.length;
 export type Colors = (typeof COLORS)[number];
 
 export class Tetromino {
-  #type: TetrominoTypes;
-  #color: Colors;
-  #blocks: number[][]; // 4 x 2 matrix
-  #pivotPosition: number[]; // [row, col]
-  #DAS: number; // Delayed Auto Shift
-  #isDownPressed: boolean;
-  #fallInterval: number;
-  #hardDropInterval: number;
-  #isLocked: boolean;
+  private _color: Colors;
+  private readonly _blocks: BlockPositions;
+  private _pivotPosition: Position;
+  private isDownPressed: boolean;
+  private _isLocked: boolean;
+  private readonly DAS: number; // Delayed Auto Shift
+  private readonly fallInterval: number;
+  private readonly hardDropInterval: number;
 
   /**
    * Create a Tetromino.
    * @param {TetrominoTypes} type
    * @param {Colors} color
-   * @param {number[]} pivotPosition - [row, col]
+   * @param {Position} pivotPosition - [x, y]
    * @param {number} level -  non-negative integer
    */
   constructor(
-    type: TetrominoTypes,
+    private readonly type: TetrominoTypes,
     color: Colors,
-    pivotPosition: number[],
+    pivotPosition: Position,
     level: number
   ) {
-    this.#type = type;
-    this.#color = color;
-    this.#blocks = TETROMINO_BLOCKS[type];
-    this.#pivotPosition = pivotPosition;
-    this.#DAS = 200; // 200ms
-    this.#isDownPressed = false;
-    this.#fallInterval = 1000 - 50 * level;
-    this.#hardDropInterval = 50;
-    this.#isLocked = false;
+    this._color = color;
+    this._blocks = TETROMINO_BLOCKS[type];
+    this._pivotPosition = pivotPosition;
+    this.isDownPressed = false;
+    this._isLocked = false;
+    this.DAS = 200; // 200ms
+    this.fallInterval = 1000 - 50 * level;
+    this.hardDropInterval = 50;
   }
 
   update(elapsedTime: number, state: State, keys: Record<string, boolean>) {}
 
-  #moveDown() {}
+  getBlockPositions(): BlockPositions {
+    return this._blocks.map(([offsetX, offsetY]) => [
+      offsetX + this._pivotPosition[0],
+      offsetY + this._pivotPosition[1],
+    ]) as BlockPositions;
+  }
 
-  #hardDrop() {}
+  private moveDown() {}
 
-  #horizontalMove(direction: 'left' | ' right') {}
+  private hardDrop() {}
 
-  #rotate(direction = 'clockwise') {}
+  private horizontalMove(direction: 'left' | ' right') {}
+
+  private rotate(direction = 'clockwise') {}
 
   get isLocked() {
-    return this.#isLocked;
+    return this._isLocked;
   }
 
-  get blocks() {
-    return this.#blocks;
-  }
-
-  get pivotPosition() {
-    return this.#pivotPosition;
+  get color() {
+    return this._color;
   }
 }
 

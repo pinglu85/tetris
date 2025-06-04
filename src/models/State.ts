@@ -4,58 +4,56 @@ import { Tetromino } from './Tetromino';
 import type { TetrominoTypes, Colors, TetrominoPreview } from './Tetromino';
 
 export class State {
-  #score: number;
-  #level: number;
-  #clearedLines: number;
-  #isGameOver: boolean;
-  #currTetromino: Tetromino;
-  #nextTetromino: TetrominoPreview;
-  #board: Board;
-  #onTetrominoLock: () => void;
+  private _score: number;
+  private _level: number;
+  private clearedLineCount: number;
+  private _isGameOver: boolean;
+  private _currentTetromino: Tetromino;
+  private _nextTetromino: TetrominoPreview;
+  private _board: Board;
 
   constructor(
     board: Board,
-    currTetromino: Tetromino,
+    currentTetromino: Tetromino,
     nextTetromino: TetrominoPreview,
-    onTetrominoLock: () => void
+    private readonly onTetrominoLock: () => void
   ) {
-    this.#score = 0;
-    this.#level = 0;
-    this.#clearedLines = 0;
-    this.#isGameOver = false;
-    this.#currTetromino = currTetromino;
-    this.#nextTetromino = nextTetromino;
-    this.#board = board;
-    this.#onTetrominoLock = onTetrominoLock;
+    this._score = 0;
+    this._level = 0;
+    this.clearedLineCount = 0;
+    this._isGameOver = false;
+    this._currentTetromino = currentTetromino;
+    this._nextTetromino = nextTetromino;
+    this._board = board;
   }
 
   update(elapsedTime: number, keys: Record<string, boolean>) {}
 
   get score() {
-    return this.#score;
+    return this._score;
   }
 
   get level() {
-    return this.#level;
+    return this._level;
   }
 
   get isGameOver() {
-    return this.#isGameOver;
+    return this._isGameOver;
   }
 
-  get currTetromino() {
-    return this.#currTetromino;
+  get currentTetromino() {
+    return this._currentTetromino;
   }
 
-  set currTetromino(tetromino: Tetromino) {}
+  set currentTetromino(tetromino: Tetromino) {}
 
   get nextTetromino() {
-    return this.#nextTetromino;
+    return this._nextTetromino;
   }
 
   set nextTetromino(tetromino: TetrominoPreview) {}
 
   get board() {
-    return this.#board;
+    return this._board;
   }
 }
