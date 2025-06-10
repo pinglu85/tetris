@@ -60,9 +60,17 @@ const TETROMINO_BLOCKS: TetrominoBlocks = {
     [-1, 1],
     [0, 1],
   ],
-};
+} as const;
 
-const COLORS = ['blue', 'green', 'navy', 'peach', 'pink', 'purple', 'yellow'];
+const COLORS = [
+  'blue',
+  'green',
+  'navy',
+  'peach',
+  'pink',
+  'purple',
+  'yellow',
+] as const;
 const COLOR_COUNT = COLORS.length;
 export type Colors = (typeof COLORS)[number];
 
