@@ -75,7 +75,6 @@ const COLOR_COUNT = COLORS.length;
 export type Colors = (typeof COLORS)[number];
 
 const DELAYED_AUTO_SHIFT = 14; // 14 frames
-const HARD_DROP_INTERVAL = 50; // 50ms
 // https://harddrop.com/wiki/Tetris_The_Grand_Master
 const GRAVITY_DENOMINATOR = 256;
 // Gravity G = number of rows per frame
@@ -114,6 +113,7 @@ const LEVEL_GRAVITY_TABLE: [number, number][] = [
   [450, 768 / GRAVITY_DENOMINATOR],
   [500, 5120 / GRAVITY_DENOMINATOR],
 ] as const;
+const HARD_DROP_GRAVITY = 20;
 
 export function getGravity(level: number): number {
   let gravity = LEVEL_GRAVITY_TABLE[0][1];
