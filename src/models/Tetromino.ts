@@ -74,7 +74,7 @@ const COLORS = [
 const COLOR_COUNT = COLORS.length;
 export type Colors = (typeof COLORS)[number];
 
-const DELAYED_AUTO_SHIFT = 200; // 200ms
+const DELAYED_AUTO_SHIFT = 14; // 14 frames
 const HARD_DROP_INTERVAL = 50; // 50ms
 // https://harddrop.com/wiki/Tetris_The_Grand_Master
 const GRAVITY_DENOMINATOR = 256;
