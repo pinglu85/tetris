@@ -6,10 +6,7 @@ export interface Cell {
   color: string;
 }
 
-export type TetrominoLike = Pick<
-  Tetromino,
-  'getBlockPositions' | 'isLocked' | 'color'
->;
+export type TetrominoLike = Pick<Tetromino, 'getBlockPositions' | 'color'>;
 
 export class Board {
   #grid: Cell[][];
@@ -101,11 +98,7 @@ export class Board {
     return new Board(grid, bufferRowCount);
   }
 
-  integrateLockedTetromino(tetromino: TetrominoLike): void {
-    if (!tetromino.isLocked) {
-      throw new Error('The tetromino must be locked.');
-    }
-
+  lockTetromino(tetromino: TetrominoLike): void {
     const blocks = tetromino.getBlockPositions();
     let isFloating = true;
 
