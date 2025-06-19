@@ -248,7 +248,7 @@ describe('Board', () => {
       }).toThrowError(RangeError);
     });
 
-    it('throws an error if the grid contains any completed lines', () => {
+    it('throws an error if the grid contains any completed rows', () => {
       const grid = stringToGrid(
         `
           . . . . . . . . . .
@@ -897,7 +897,7 @@ describe('Board', () => {
       expect(board.grid).toStrictEqual(expectedGrid);
     });
 
-    it('clears multiple completed rows separated by incomplete lines and shifts all the incomplete rows correctly down', () => {
+    it('clears multiple completed rows separated by incomplete rows and shifts all the incomplete rows correctly down', () => {
       const grid = stringToGrid(
         `
           . . . . . . . . . .
