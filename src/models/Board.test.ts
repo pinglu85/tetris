@@ -737,8 +737,8 @@ describe('Board', () => {
     );
   });
 
-  describe('clearLines', () => {
-    it('clears a single complete line', () => {
+  describe('clearCompletedRows', () => {
+    it('clears a single completed row', () => {
       const grid = stringToGrid(
         `
           . . . . . . . . . .
@@ -778,15 +778,13 @@ describe('Board', () => {
         `,
         BUFFER_ROW_COUNT
       );
-      const expectedLineClearCount = 1;
 
       board.integrateLockedTetromino(tetromino);
-      const lineClearCount = board.clearLines();
-      expect(lineClearCount).toBe(expectedLineClearCount);
+      board.clearCompletedRows();
       expect(board.grid).toStrictEqual(expectedGrid);
     });
 
-    it('clears multiple continuous complete lines', () => {
+    it('clears multiple continuous completed rows', () => {
       const grid = stringToGrid(
         `
           . . . . . . . . . .
@@ -827,15 +825,13 @@ describe('Board', () => {
         `,
         BUFFER_ROW_COUNT
       );
-      const expectedLineClearCount = 3;
 
       board.integrateLockedTetromino(tetromino);
-      const lineClearCount = board.clearLines();
-      expect(lineClearCount).toBe(expectedLineClearCount);
+      board.clearCompletedRows();
       expect(board.grid).toStrictEqual(expectedGrid);
     });
 
-    it('clears a single complete line and shifts the above rows down', () => {
+    it('clears a single completed row and shifts the above rows down', () => {
       const grid = stringToGrid(
         `
           . . . . . . . . . 
@@ -879,15 +875,13 @@ describe('Board', () => {
         `,
         BUFFER_ROW_COUNT
       );
-      const expectedLineClearCount = 1;
 
       board.integrateLockedTetromino(tetromino);
-      const lineClearCount = board.clearLines();
-      expect(lineClearCount).toBe(expectedLineClearCount);
+      board.clearCompletedRows();
       expect(board.grid).toStrictEqual(expectedGrid);
     });
 
-    it('clears multiple continuous complete lines and shifts the above rows down', () => {
+    it('clears multiple continuous completed rows and shifts the above rows down', () => {
       const grid = stringToGrid(
         `
           . . . . . . . . . .
@@ -941,15 +935,13 @@ describe('Board', () => {
         `,
         BUFFER_ROW_COUNT
       );
-      const expectedLineClearCount = 3;
 
       board.integrateLockedTetromino(tetromino);
-      const lineClearCount = board.clearLines();
-      expect(lineClearCount).toBe(expectedLineClearCount);
+      board.clearCompletedRows();
       expect(board.grid).toStrictEqual(expectedGrid);
     });
 
-    it('clears multiple complete lines separated by incomplete lines and shifts all the incomplete rows correctly down', () => {
+    it('clears multiple completed rows separated by incomplete lines and shifts all the incomplete rows correctly down', () => {
       const grid = stringToGrid(
         `
           . . . . . . . . . .
@@ -1007,11 +999,9 @@ describe('Board', () => {
         `,
         BUFFER_ROW_COUNT
       );
-      const expectedLineClearCount = 2;
 
       board.integrateLockedTetromino(tetromino);
-      const lineClearCount = board.clearLines();
-      expect(lineClearCount).toBe(expectedLineClearCount);
+      board.clearCompletedRows();
       expect(board.grid).toStrictEqual(expectedGrid);
     });
   });

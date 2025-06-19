@@ -16,12 +16,14 @@ export class Board {
   readonly #totalRowCount: number;
   readonly #columnCount: number;
   readonly #bufferRowCount: number;
+  #completedRowIndices: Set<number>;
 
   private constructor(grid: Cell[][], bufferRowCount: number) {
     this.#grid = grid;
     this.#totalRowCount = grid.length;
     this.#columnCount = grid[0].length;
     this.#bufferRowCount = bufferRowCount;
+    this.#completedRowIndices = new Set();
   }
 
   static createEmpty(
@@ -132,6 +134,16 @@ export class Board {
       this.#grid[i][j].filled = true;
       this.#grid[i][j].color = tetromino.color;
     }
+
+    this.#findAndRecordCompletedRows();
+  }
+
+  #findAndRecordCompletedRows(): void {
+    for (let i = this.#bufferRowCount; i < this.#totalRowCount; i++) {
+      if (this.#grid[i].every((col) => col.filled)) {
+        this.#completedRowIndices.add(i);
+      }
+    }
   }
 
   isValidPosition([i, j]: Position): boolean {
@@ -148,45 +160,49 @@ export class Board {
     return true;
   }
 
-  clearLines(): number {
-    const availableRowIndexQueue: number[] = [];
-    let clearedLineCount = 0;
+  clearCompletedRows(): void {
+    if (this.#completedRowIndices.size === 0) return;
 
-    for (let i = this.#totalRowCount - 1; i >= 0; i--) {
-      if (this.#grid[i].every((col) => col.filled)) {
-        clearedLineCount += 1;
-        availableRowIndexQueue.push(i);
+    const freedRowIndexQueue = [];
+
+    for (let i = this.#totalRowCount - 1; i >= this.#bufferRowCount; i--) {
+      if (this.#completedRowIndices.has(i)) {
+        freedRowIndexQueue.push(i);
 
         for (let j = 0; j < this.#columnCount; j++) {
           this.#grid[i][j].filled = false;
           this.#grid[i][j].color = '';
         }
+
         continue;
       }
 
-      const availableRowIndex = availableRowIndexQueue.shift();
-      if (availableRowIndex === undefined) continue;
+      const freedRowIndex = freedRowIndexQueue.shift();
+      if (freedRowIndex === undefined) continue;
 
       let emptyCellCount = 0;
-
       for (let j = 0; j < this.#columnCount; j++) {
         if (!this.#grid[i][j].filled) emptyCellCount++;
 
-        this.#grid[availableRowIndex][j].filled = this.#grid[i][j].filled;
-        this.#grid[availableRowIndex][j].color = this.#grid[i][j].color;
+        this.#grid[freedRowIndex][j].filled = this.#grid[i][j].filled;
+        this.#grid[freedRowIndex][j].color = this.#grid[i][j].color;
         this.#grid[i][j].filled = false;
         this.#grid[i][j].color = '';
       }
 
       if (emptyCellCount === this.#columnCount) break;
 
-      availableRowIndexQueue.push(i);
+      freedRowIndexQueue.push(i);
     }
 
-    return clearedLineCount;
+    this.#completedRowIndices.clear();
   }
 
   get grid(): readonly (readonly Readonly<Cell>[])[] {
     return this.#grid;
+  }
+
+  get completedRowIndices(): ReadonlySet<number> {
+    return this.#completedRowIndices;
   }
 }
