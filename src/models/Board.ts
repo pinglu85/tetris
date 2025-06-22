@@ -6,22 +6,21 @@ export interface Cell {
   color: string;
 }
 
-export type TetrominoLike = Pick<
-  Tetromino,
-  'getBlockPositions' | 'isLocked' | 'color'
->;
+export type TetrominoLike = Pick<Tetromino, 'getBlockPositions' | 'color'>;
 
 export class Board {
   #grid: Cell[][];
   readonly #totalRowCount: number;
   readonly #columnCount: number;
   readonly #bufferRowCount: number;
+  #completedRowIndices: Set<number>;
 
   private constructor(grid: Cell[][], bufferRowCount: number) {
     this.#grid = grid;
     this.#totalRowCount = grid.length;
     this.#columnCount = grid[0].length;
     this.#bufferRowCount = bufferRowCount;
+    this.#completedRowIndices = new Set();
   }
 
   static createEmpty(
@@ -72,7 +71,7 @@ export class Board {
     }
 
     const columnCount = gridWithBufferRows[0].length;
-    const grid: Cell[][] = new Array(totalRowCount);
+    const grid: Cell[][] = Array.from({ length: totalRowCount });
 
     for (let i = 0; i < totalRowCount; i++) {
       if (gridWithBufferRows[i].length === 0) {
@@ -83,7 +82,7 @@ export class Board {
         throw new Error('All grid rows must have the same length.');
       }
 
-      grid[i] = new Array(columnCount);
+      grid[i] = Array.from({ length: columnCount });
       let filledCellCount = 0;
       for (let j = 0; j < columnCount; j++) {
         grid[i][j] = { ...gridWithBufferRows[i][j] };
@@ -92,18 +91,14 @@ export class Board {
       }
 
       if (filledCellCount === columnCount) {
-        throw new Error('Grid should not contain any completed lines.');
+        throw new Error('Grid should not contain any completed rows.');
       }
     }
 
     return new Board(grid, bufferRowCount);
   }
 
-  integrateLockedTetromino(tetromino: TetrominoLike): void {
-    if (!tetromino.isLocked) {
-      throw new Error('The tetromino must be locked.');
-    }
-
+  lockTetromino(tetromino: TetrominoLike): void {
     const blocks = tetromino.getBlockPositions();
     let isFloating = true;
 
@@ -132,6 +127,16 @@ export class Board {
       this.#grid[i][j].filled = true;
       this.#grid[i][j].color = tetromino.color;
     }
+
+    this.#findAndRecordCompletedRows();
+  }
+
+  #findAndRecordCompletedRows(): void {
+    for (let i = this.#bufferRowCount; i < this.#totalRowCount; i++) {
+      if (this.#grid[i].every((col) => col.filled)) {
+        this.#completedRowIndices.add(i);
+      }
+    }
   }
 
   isValidPosition([i, j]: Position): boolean {
@@ -148,45 +153,49 @@ export class Board {
     return true;
   }
 
-  clearLines(): number {
-    const availableRowIndexQueue: number[] = [];
-    let clearedLineCount = 0;
+  clearCompletedRows(): void {
+    if (this.#completedRowIndices.size === 0) return;
 
-    for (let i = this.#totalRowCount - 1; i >= 0; i--) {
-      if (this.#grid[i].every((col) => col.filled)) {
-        clearedLineCount += 1;
-        availableRowIndexQueue.push(i);
+    const freedRowIndexQueue = [];
+
+    for (let i = this.#totalRowCount - 1; i >= this.#bufferRowCount; i--) {
+      if (this.#completedRowIndices.has(i)) {
+        freedRowIndexQueue.push(i);
 
         for (let j = 0; j < this.#columnCount; j++) {
           this.#grid[i][j].filled = false;
           this.#grid[i][j].color = '';
         }
+
         continue;
       }
 
-      const availableRowIndex = availableRowIndexQueue.shift();
-      if (availableRowIndex === undefined) continue;
+      const freedRowIndex = freedRowIndexQueue.shift();
+      if (freedRowIndex === undefined) continue;
 
       let emptyCellCount = 0;
-
       for (let j = 0; j < this.#columnCount; j++) {
         if (!this.#grid[i][j].filled) emptyCellCount++;
 
-        this.#grid[availableRowIndex][j].filled = this.#grid[i][j].filled;
-        this.#grid[availableRowIndex][j].color = this.#grid[i][j].color;
+        this.#grid[freedRowIndex][j].filled = this.#grid[i][j].filled;
+        this.#grid[freedRowIndex][j].color = this.#grid[i][j].color;
         this.#grid[i][j].filled = false;
         this.#grid[i][j].color = '';
       }
 
       if (emptyCellCount === this.#columnCount) break;
 
-      availableRowIndexQueue.push(i);
+      freedRowIndexQueue.push(i);
     }
 
-    return clearedLineCount;
+    this.#completedRowIndices.clear();
   }
 
   get grid(): readonly (readonly Readonly<Cell>[])[] {
     return this.#grid;
+  }
+
+  get completedRowIndices(): ReadonlySet<number> {
+    return this.#completedRowIndices;
   }
 }
