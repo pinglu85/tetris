@@ -1167,6 +1167,43 @@ describe('Board', () => {
       board.clearCompletedRows();
       expect(board.grid).toStrictEqual(expectedGrid);
     });
+
+    it('removes all entries from `completedRowIndices`', () => {
+      const grid = stringToGrid(
+        `
+          . . . . . . . . . .
+          . P B . . . . . . .
+          P P B B B N N . . W
+          P W W . N N . . . W
+          P W W G G G Y . W W
+          P W w G G . Y W W W
+        `,
+        BUFFER_ROW_COUNT
+      );
+      const board = Board.fromGrid(grid, BUFFER_ROW_COUNT);
+      /**
+       *  Tetromino:
+       *   B B
+       *   B
+       *   B
+       */
+      const tetromino: TetrominoLike = {
+        color: Colors.BLUE,
+        getBlockPositions: mockGetBlockPosition(
+          [
+            [-1, 0],
+            [-1, 1],
+            [0, 0],
+            [1, 0],
+          ],
+          [3 + BUFFER_ROW_COUNT, 7]
+        ),
+      };
+
+      board.lockTetromino(tetromino);
+      board.clearCompletedRows();
+      expect(board.completedRowIndices).toHaveLength(0);
+    });
   });
 });
 
