@@ -71,7 +71,7 @@ export class Board {
     }
 
     const columnCount = gridWithBufferRows[0].length;
-    const grid: Cell[][] = new Array(totalRowCount);
+    const grid: Cell[][] = Array.from({ length: totalRowCount });
 
     for (let i = 0; i < totalRowCount; i++) {
       if (gridWithBufferRows[i].length === 0) {
@@ -82,7 +82,7 @@ export class Board {
         throw new Error('All grid rows must have the same length.');
       }
 
-      grid[i] = new Array(columnCount);
+      grid[i] = Array.from({ length: columnCount });
       let filledCellCount = 0;
       for (let j = 0; j < columnCount; j++) {
         grid[i][j] = { ...gridWithBufferRows[i][j] };
