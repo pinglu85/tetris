@@ -91,7 +91,7 @@ export class Board {
       }
 
       if (filledCellCount === columnCount) {
-        throw new Error('Grid should not contain any completed lines.');
+        throw new Error('Grid should not contain any completed rows.');
       }
     }
 
